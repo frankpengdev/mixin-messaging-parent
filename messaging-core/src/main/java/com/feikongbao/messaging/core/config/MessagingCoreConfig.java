@@ -161,7 +161,7 @@ public class MessagingCoreConfig {
         // 最小空闲连接数
         config.setMinimumIdle(5);
         // 最大连接
-        config.setMaximumPoolSize(50);
+        config.setMaximumPoolSize(300);
         config.setPoolName("messagingCorePoolName");
         return new HikariDataSource(config);
     }
