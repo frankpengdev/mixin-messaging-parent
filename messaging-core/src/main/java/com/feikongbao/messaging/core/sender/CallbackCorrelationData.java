@@ -1,7 +1,6 @@
 package com.feikongbao.messaging.core.sender;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.amqp.core.Correlation;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 
 /**
@@ -9,7 +8,7 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
  * @Author jinjun_luo
  * @Date 2019/4/22 14:06
  **/
-public class CallbackCorrelationData extends CorrelationData implements Correlation {
+public class CallbackCorrelationData extends CorrelationData {
 
     /** 消息体*/
     private volatile Object message;
