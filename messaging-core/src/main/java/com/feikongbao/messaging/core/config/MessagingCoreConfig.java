@@ -16,6 +16,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -161,18 +162,30 @@ public class MessagingCoreConfig {
      */
     @Bean(MESSAGE_CORE_DATA_SOURCE)
     public DataSource messagingCoreDataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setDriverClassName("com.mysql.jdbc.Driver");
-        config.setJdbcUrl(dbUrl);
-        config.setUsername(dbUserName);
-        config.setPassword(dbPassword);
-        config.setAutoCommit(true);
-        // 最小空闲连接数
-        config.setMinimumIdle(minimumIdle);
-        // 最大连接
-        config.setMaximumPoolSize(maximumPoolSize);
-        config.setPoolName(messagingCorePoolName);
-        return new HikariDataSource(config);
+//        HikariConfig config = new HikariConfig();
+//        config.setDriverClassName("com.mysql.jdbc.Driver");
+//        config.setJdbcUrl(dbUrl);
+//        config.setUsername(dbUserName);
+//        config.setPassword(dbPassword);
+//        config.setAutoCommit(true);
+//        // 最小空闲连接数
+//        config.setMinimumIdle(minimumIdle);
+//        // 最大连接
+//        config.setMaximumPoolSize(maximumPoolSize);
+//        config.setPoolName(messagingCorePoolName);
+//        return new HikariDataSource(config);
+
+        HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create().type(HikariDataSource.class).build();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setJdbcUrl(dbUrl);
+        dataSource.setUsername(dbUserName);
+        dataSource.setPassword(dbPassword);
+        //空闲数
+        dataSource.setMinimumIdle(1);
+        dataSource.setMaximumPoolSize(maximumPoolSize);
+
+        dataSource.setPoolName(messagingCorePoolName);
+        return dataSource;
     }
 
     /**
