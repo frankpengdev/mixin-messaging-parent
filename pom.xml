@@ -101,5 +101,15 @@
             </plugin>
         </plugins>
     </build>
-
+    <!-- 打包到远程仓库-->
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://gitlab.feikongbao.cn:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>http://gitlab.feikongbao.cn:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
