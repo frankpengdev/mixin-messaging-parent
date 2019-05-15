@@ -73,6 +73,15 @@ public class MessagingCoreConfig {
     @Value("${spring.datasource.password}")
     private String dbPassword;
 
+    @Value("${spring.minimum.idle.size}")
+    private int minimumIdle;
+
+    @Value("${spring.maximum.pool.size}")
+    private int maximumPoolSize;
+
+    @Value("${spring.messaging.core.pool.name}")
+    private String messagingCorePoolName;
+
     /** DataSource*/
     public final static String MESSAGE_CORE_DATA_SOURCE = "messagingCoreDataSource";
 
@@ -159,10 +168,10 @@ public class MessagingCoreConfig {
         config.setPassword(dbPassword);
         config.setAutoCommit(true);
         // 最小空闲连接数
-        config.setMinimumIdle(5);
+        config.setMinimumIdle(minimumIdle);
         // 最大连接
-        config.setMaximumPoolSize(300);
-        config.setPoolName("messagingCorePoolName");
+        config.setMaximumPoolSize(maximumPoolSize);
+        config.setPoolName(messagingCorePoolName);
         return new HikariDataSource(config);
     }
 
