@@ -66,6 +66,7 @@ public class MessageWeChatSendTemplateMsgService {
         } else {
             // 没成功的 定时计划在推送
             userMessage.setUserMessageStatus("FAIL");
+            userMessage.setErrMessage(weChatResponseEntity.getErrMsg());
         }
 
         userMessageMapper.insert(userMessage);

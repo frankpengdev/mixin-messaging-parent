@@ -37,7 +37,7 @@
         <!-- 邮件服务包和客户包实体 -->
         <module>messaging-email-api</module>
         <!-- 发送微信服务包 -->
-        <!--<module>message-wechat</module>-->
+        <module>messaging-wechat</module>
     </modules>
     <dependencies>
         <!-- springboot 启动器-->

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,7 +38,10 @@ public class MessageWeChatSendTemplateMsgServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     public void  sendTemplateMessageTest() throws Exception {
-        String json = new String(Files.readAllBytes(Paths.get("D:\\yodoo\\megalodon\\messaging-wechat\\src\\test\\resources\\template.json")));
+
+        File file = new File(Thread.currentThread().getContextClassLoader().getResource("template.json").getFile());
+        String json = new String(Files.readAllBytes(file.toPath()));
+
         System.out.println(json);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -46,11 +50,6 @@ public class MessageWeChatSendTemplateMsgServiceTest {
 
         System.out.println(templateData.getTouser());
         System.out.println(templateData.getPhoneNum());
-
-        /*Map<String,MessageWeChatTemplateDataValue> dataValueMap = templateData.getData();
-        for(Map.Entry<String,MessageWeChatTemplateDataValue> da: dataValueMap.entrySet()){
-            System.out.println(da.getKey()+"   "+ da.getValue().getColor());
-        };*/
 
         templateData.setTouser("oSiOu5n0qijw0pIBuTZjNrAmauSY");
         templateData.setTemplateId("H-_2o14aSsXuycYEtZQ_IicYeO2EQjH1K-QaypAdaJM");

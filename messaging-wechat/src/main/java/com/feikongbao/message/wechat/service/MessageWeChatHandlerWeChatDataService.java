@@ -1,8 +1,11 @@
 package com.feikongbao.message.wechat.service;
 
+import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
+import com.feikongbao.message.wechat.client.service.MessageWeChatSendTemplateMsgService;
 import com.feikongbao.message.wechat.exception.MessageWeChatException;
 import com.feikongbao.message.wechat.model.data_type.MessageWeChatUserInfo;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
+import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserMessageMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.message.wechat.util.MessageWeChatRequestUrlEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +54,21 @@ public class MessageWeChatHandlerWeChatDataService {
 
     @Autowired
     private MessageWeChatUserInfoMapper weChatInfoMapper;
+
+    @Autowired
+    private MessageWeChatUserMessageMapper userMessageMapper;
+
+    @Autowired
+    private MessageWeChatSendTemplateMsgService sendTemplateMsgService;
+
+    public void  resendTemplateMessage(String messageId){
+        MessageWeChatUserMessage userMessage = userMessageMapper.selectMessageContentByMessageId(messageId);
+        try {
+            sendTemplateMsgService.sendTemplateMessage(userMessage.getUserMessageContent(),userMessage);
+        } catch (MessageWeChatException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Delete user by open id.
@@ -165,7 +183,6 @@ public class MessageWeChatHandlerWeChatDataService {
         return accessToken;
 
     }
-
 
     /**
      * Gets we chat user open id.

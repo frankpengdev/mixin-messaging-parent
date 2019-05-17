@@ -2,11 +2,6 @@
   "phone_num" : "18221509132",
   "touser":"OPENID",
   "template_id":"ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY",
-  "url":"http://weixin.qq.com/download",
-  "miniprogram":{
-    "appid":"xiaochengxuappid12345",
-    "pagepath":"index?foo=bar"
-  },
   "data": {
     "first": {
       "value": "您好，你有一个申请已完成审批！",

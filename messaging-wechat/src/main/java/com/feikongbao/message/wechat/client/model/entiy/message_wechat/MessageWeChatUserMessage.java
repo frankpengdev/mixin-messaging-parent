@@ -50,6 +50,16 @@ public class MessageWeChatUserMessage {
      */
     private String userMessageContent;
 
+    private String errMessage;
+
+    public String getErrMessage() {
+        return errMessage;
+    }
+
+    public void setErrMessage(String errMessage) {
+        this.errMessage = errMessage;
+    }
+
     /**
      * Gets user message id.
      *

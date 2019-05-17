@@ -4,15 +4,14 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
-    <classPathEntry location="D:/tool/mysql-connector-java-8.0.13.jar"/>
-
     <context id="context" targetRuntime="MyBatis3">
         <commentGenerator>
-            <property name="suppressAllComments" value="false"/>
+            <!-- 去掉注释 -->
+            <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
         </commentGenerator>
 
-        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://47.100.43.176:3306/fei_kong_bao_messaging_wechat"
                         userId="root"
                         password="Yodoo1sfaraway">
@@ -22,19 +21,22 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.feikongbao.message.wechat.model.mapper" targetProject=".">
+        <!-- 实体 -->
+        <javaModelGenerator targetPackage="com.feikongbao.message.wechat.model.data_type" targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.feikongbao.message.wechat.model.data_type" targetProject=".">
+        <!-- xml -->
+        <sqlMapGenerator targetPackage="com.feikongbao.message.wechat.model.mapper" targetProject="src/main/resources">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="com.feikongbao.message.wechat.model.mapper" type="XMLMAPPER" targetProject=".">
+        <!-- 接口 -->
+        <javaClientGenerator targetPackage="com.feikongbao.message.wechat.model.mapper" type="XMLMAPPER" targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="wechat_user_message"
+        <table tableName="test"
                enableCountByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"

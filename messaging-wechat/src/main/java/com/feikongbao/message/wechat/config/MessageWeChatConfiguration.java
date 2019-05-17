@@ -1,11 +1,7 @@
 package com.feikongbao.message.wechat.config;
 
-import com.feikongbao.message.wechat.config.MessageWeChatCacheConfiguration;
-import com.feikongbao.message.wechat.config.MessageWeChatRestTemplateConfiguration;
 import com.feikongbao.messaging.core.config.MessagingCoreConfig;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.zaxxer.hikari.HikariDataSource;
-import freemarker.cache.TemplateLoader;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -24,13 +20,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
-import java.util.Locale;
+import java.util.Base64;
 
 /**
  * 配置类
@@ -44,7 +38,9 @@ import java.util.Locale;
         sqlSessionFactoryRef = MessageWeChatConfiguration.WECHAT_SQL_SESSION_FACTORY_BEAN_NAME,
         sqlSessionTemplateRef = MessageWeChatConfiguration.WECHAT_SQL_SESSION_TEMPLATE_BEAN_NAME)
 @EnableTransactionManagement
-@Import({MessageWeChatRestTemplateConfiguration.class, MessageWeChatCacheConfiguration.class, MessagingCoreConfig.class})
+@Import({MessageWeChatRestTemplateConfiguration.class,
+        MessageWeChatCacheConfiguration.class,
+        MessagingCoreConfig.class})
 @Configuration
 public class MessageWeChatConfiguration {
 
@@ -72,36 +68,30 @@ public class MessageWeChatConfiguration {
     @Bean("messageWeChatDataSource")
     public DataSource messageWeChatDataSource() {
 
-        HikariDataSource dataSource = (HikariDataSource) DataSourceBuilder.create().type(HikariDataSource.class).build();
+        HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setJdbcUrl(weChatDbUrl);
         dataSource.setUsername(weChatDbUserName);
-        dataSource.setPassword(weChatDbUserPasswordEncrypted);
+
+        String password = new String(Base64.getMimeDecoder().decode(weChatDbUserPasswordEncrypted));
+        dataSource.setPassword(password);
         //空闲数
         dataSource.setMinimumIdle(1);
         dataSource.setMaximumPoolSize(weChatDbPoolMaxSize);
 
         dataSource.setPoolName("wechat_mysql_thread");
 
-        //String weChatConnectionUserPassword = new String(Base64.getMimeDecoder().decode(weChatDbUserPasswordEncrypted));
-
         return dataSource;
 
     }
 
-    /**
-     * @param messageweChatObjectDataSource
-     * @return TransactionManager
-     */
+
     @Bean(WECHAT_DATA_SOURCE_TRANSACTION_MANAGER_BEAN_NAME)
     public DataSourceTransactionManager messageWeChatTransactionManager() {
         return new DataSourceTransactionManager(messageWeChatDataSource());
     }
 
-    /**
-     * @param messageweChatObjectDataSource
-     * @return
-     */
+
     @Bean(WECHAT_SQL_SESSION_FACTORY_BEAN_NAME)
     public SqlSessionFactory messageWeChatSqlSessionFactory() {
         TransactionFactory transactionFactory = new SpringManagedTransactionFactory();

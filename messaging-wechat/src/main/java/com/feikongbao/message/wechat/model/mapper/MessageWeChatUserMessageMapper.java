@@ -1,6 +1,7 @@
 package com.feikongbao.message.wechat.model.mapper;
 
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -42,4 +43,14 @@ public interface MessageWeChatUserMessageMapper {
      * @date 2019/05/13 10:28:19
      */
     Integer updateUserMessageStatus(MessageWeChatUserMessage weChatUserMessage);
+
+    /**
+     * Select message content by message id.
+     *
+     * @param userMessageMsgId the message id
+     * @return the message we chat user message
+     * @author zili.wang
+     * @date 2019/05/15 20:39:42
+     */
+    MessageWeChatUserMessage selectMessageContentByMessageId(@Param("userMessageMsgId") String userMessageMsgId);
 }

@@ -3,6 +3,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * @author zili.wang
@@ -11,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = MessageWeChatConfiguration.class)
 @EnableAutoConfiguration
 @ComponentScan("com.feikongbao.message.wechat")
+@EnableWebMvc
 public class SpringBootStartApplication {
 
     public static void main(String[] args) {

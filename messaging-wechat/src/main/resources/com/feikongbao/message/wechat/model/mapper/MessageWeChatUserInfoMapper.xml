@@ -21,7 +21,7 @@
         <result column="user_subscribe_scene" jdbcType="VARCHAR" property="userSubscribeScene"/>
         <result column="user_qr_scene" jdbcType="VARCHAR" property="userQrScene"/>
         <result column="user_qr_scene_str" jdbcType="VARCHAR" property="userQrSceneStr"/>
-        <result column="user_tagid_list" jdbcType="VARCHAR" property="userTagIdString"></result>
+        <result column="user_tagid_list" jdbcType="VARCHAR" property="userTagIdString" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.time.Instant" />
         <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" javaType="java.time.Instant" />
     </resultMap>
@@ -61,37 +61,43 @@
     </insert>
 
     <select id="countSelectByOpenId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT
-            count(DISTINCT user_open_id )
-        FROM
-            wechat_user_info wui
-        WHERE
-            wui.user_open_id = #{openId,jdbcType=VARCHAR}
+        SELECT count(DISTINCT user_open_id)
+          FROM wechat_user_info wui
+         WHERE wui.user_open_id = #{openId, jdbcType = VARCHAR}
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap">
-        select user_info_id, user_open_id, user_phone_num, user_subscribe, user_nickname,
-        user_sex, user_city, user_country, user_province, user_language, user_head_img_url,
-        user_subscribe_time, user_union_id, user_remark, user_group_id, user_tagid_list,
-        user_subscribe_scene, user_qr_scene, user_qr_scene_str
-        from wechat_user_info
+        select user_info_id,
+               user_open_id,
+               user_phone_num,
+               user_subscribe,
+               user_nickname,
+               user_sex,
+               user_city,
+               user_country,
+               user_province,
+               user_language,
+               user_head_img_url,
+               user_subscribe_time,
+               user_union_id,
+               user_remark,
+               user_group_id,
+               user_tagid_list,
+               user_subscribe_scene,
+               user_qr_scene,
+               user_qr_scene_str
+          from wechat_user_info
     </select>
 
     <delete id="deleteByOpenId" parameterType="java.lang.String">
-      DELETE
-        FROM
-            wechat_user_info
-        WHERE
-            user_open_id = #{openId,jdbcType=VARCHAR}
+      DELETE FROM wechat_user_info
+       WHERE user_open_id = #{openId, jdbcType = VARCHAR}
     </delete>
 
     <select id="selectOpenIdByPhoneNum" parameterType="java.lang.Long" resultType="java.lang.String">
-        SELECT
-            wui.user_open_id
-        FROM
-            wechat_user_info wui
-        WHERE
-            wui.user_phone_num = #{userPhoneNum,jdbcType=DECIMAL}
+        SELECT wui.user_open_id
+          FROM wechat_user_info wui
+         WHERE wui.user_phone_num = #{userPhoneNum, jdbcType = DECIMAL}
     </select>
 
 </mapper>

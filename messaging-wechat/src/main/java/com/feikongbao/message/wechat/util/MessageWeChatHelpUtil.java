@@ -89,7 +89,7 @@ public class MessageWeChatHelpUtil {
         return map;
     }
 
-    public static Map<String, String> xml2Map(String message) throws DocumentException, IOException {
+    public static Map<String, String> xml2Map(String message) throws DocumentException {
         Map<String, String> map = new ConcurrentHashMap<>(16);
         SAXReader saxReader = new SAXReader();
         Document document = saxReader.read(message);
