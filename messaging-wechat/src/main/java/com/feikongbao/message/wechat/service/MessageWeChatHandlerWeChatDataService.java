@@ -1,5 +1,6 @@
 package com.feikongbao.message.wechat.service;
 
+import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateData;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
 import com.feikongbao.message.wechat.client.service.MessageWeChatSendTemplateMsgService;
 import com.feikongbao.message.wechat.exception.MessageWeChatException;
@@ -8,6 +9,7 @@ import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserMessageMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.message.wechat.util.MessageWeChatRequestUrlEnum;
+import com.feikongbao.messaging.core.exception.MessagingCoreException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,13 +65,45 @@ public class MessageWeChatHandlerWeChatDataService {
     @Autowired
     private MessageWeChatSendTemplateMsgService sendTemplateMsgService;
 
-    public void  resendTemplateMessage(String messageId){
+    // TODO
+    public void resendTemplateMessage(String messageId) {
         MessageWeChatUserMessage userMessage = userMessageMapper.selectMessageContentByMessageId(messageId);
         try {
-            sendTemplateMsgService.sendTemplateMessage(userMessage.getUserMessageContent(),userMessage);
+            MessageWeChatTemplateData templateData =
+                    MessageWeChatHelpUtil.json2Object(userMessage.getUserMessageContent(), MessageWeChatTemplateData.class);
+            sendTemplateMsgService.sendTemplateMessage(templateData, userMessage);
         } catch (MessageWeChatException e) {
+            LOGGER.error("resendTemplateMessage error MessageWeChatException:" + e.getMessageBundleKey());
+        } catch (MessagingCoreException e) {
+            LOGGER.error("resendTemplateMessage error MessagingCoreException:" + e.getMessageBundleKey());
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 将微信返回的模板消息处理结果更新到对应的消息中
+     *
+     * @param status the status
+     * @param openId the open id
+     * @param msgId  the msg id
+     * @author zili.wang
+     * @date 2019/05/21 20:57:45
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void updateWeChatMessageStatus(String status, String openId, String msgId) {
+        MessageWeChatUserMessage weChatUserMessage = new MessageWeChatUserMessage();
+        weChatUserMessage.setUserOpenId(openId);
+        weChatUserMessage.setUserMessageMsgId(msgId);
+        weChatUserMessage.setLastUpdateTime(Instant.now());
+        String KEY_SUCCESS = "success";
+        if (KEY_SUCCESS.equals(status)) {
+            weChatUserMessage.setUserMessageStatus("COMPLETE");
+        }else {
+            weChatUserMessage.setUserMessageStatus("TODO");
+        }
+        weChatUserMessage.setErrMessage(status);
+        userMessageMapper.updateUserMessageStatus(weChatUserMessage);
     }
 
     /**
@@ -102,7 +138,7 @@ public class MessageWeChatHandlerWeChatDataService {
      * @author zili.wang1
      * @date 2019 /05/06 20:09:08
      */
-    @Transactional(rollbackFor = Exception.class, transactionManager = "messageWeChatTransactionManager")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, transactionManager = "messageWeChatTransactionManager")
     public void getAndInsertWeChatUserInfo(String openId, String phoneNum) throws MessageWeChatException {
 
         String accessToken = getWeChatAccessTokenFromCache();

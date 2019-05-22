@@ -6,6 +6,7 @@ import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWe
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateDataValue;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
 import com.feikongbao.message.wechat.config.MessageWeChatConfiguration;
+import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import org.junit.Test;
@@ -61,6 +62,10 @@ public class MessageWeChatSendTemplateMsgServiceTest {
 
         System.out.println("--------------------------------");
         System.out.println(objectMapper.writeValueAsString(templateData));
+        System.out.println("--------------------------------");
+        System.out.println(MessageWeChatHelpUtil.object2Json(templateData));
+        System.out.println("--------------------------------");
+
         String msg = objectMapper.writeValueAsString(templateData);
 
 
@@ -73,7 +78,7 @@ public class MessageWeChatSendTemplateMsgServiceTest {
         userMessage.setUserMessageContent(msg);
 
         System.out.println("----");
-        templateMsgService.sendTemplateMessage(objectMapper.writeValueAsString(templateData),userMessage);
+        templateMsgService.sendTemplateMessage(templateData,userMessage);
 
 
     }

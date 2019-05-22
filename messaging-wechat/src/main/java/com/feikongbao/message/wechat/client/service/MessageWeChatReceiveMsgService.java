@@ -15,17 +15,12 @@ import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 /**
  * @author zili.wang
  * @date 2019/5/8 15:38
  */
 @Service
-public class MessageWeChatSendMsgService implements ReceiverMessage {
+public class MessageWeChatReceiveMsgService implements ReceiverMessage {
 
     @Autowired
     private MessageWeChatSendTemplateMsgService templateMsgService;
@@ -51,21 +46,12 @@ public class MessageWeChatSendMsgService implements ReceiverMessage {
             String openId = userInfoMapper.selectOpenIdByPhoneNum(templateData.getPhoneNum());
             templateData.setTouser(openId);
 
-            // TODO
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            System.out.println(LocalDateTime.now().format(formatter));
-            templateData.getData().get("keyword5").setValue(LocalDateTime.now().format(formatter));
-
-            String templateDataToString = MessageWeChatHelpUtil.object2Json(templateData);
-
             MessageWeChatUserMessage userMessage = new MessageWeChatUserMessage();
             userMessage.setUserOpenId(openId);
             userMessage.setUserPhoneNum(templateData.getPhoneNum());
-            userMessage.setUserMessageContent(templateDataToString);
 
             //发送消息
-            templateMsgService.sendTemplateMessage(templateDataToString,userMessage);
+            templateMsgService.sendTemplateMessage(templateData,userMessage);
         }
-
     }
 }

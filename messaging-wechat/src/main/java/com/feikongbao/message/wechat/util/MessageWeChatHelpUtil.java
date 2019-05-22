@@ -3,6 +3,7 @@ package com.feikongbao.message.wechat.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.feikongbao.message.wechat.exception.MessageWeChatException;
 import com.feikongbao.message.wechat.model.data_type.MessageWeChatResponseMessage;
 import com.thoughtworks.xstream.XStream;
 import org.dom4j.Document;
@@ -129,10 +130,21 @@ public class MessageWeChatHelpUtil {
         return matcher.matches();
     }
 
-    public static String object2Json(Object valueType) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json  = objectMapper.writeValueAsString(valueType);
+    public static String object2Json(Object valueType) throws MessageWeChatException {
+        String json = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            json = objectMapper.writeValueAsString(valueType);
+        } catch (JsonProcessingException e) {
+            throw new MessageWeChatException("Json Processing Exception: " + valueType.getClass().getName());
+        }
         return json;
+    }
+
+
+    public static <T> T json2Object(String json, Class<T> valueType) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return (T) objectMapper.readValue(json, valueType);
     }
 
 }

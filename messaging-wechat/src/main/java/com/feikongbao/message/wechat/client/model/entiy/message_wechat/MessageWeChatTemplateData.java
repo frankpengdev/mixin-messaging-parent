@@ -3,17 +3,19 @@ package com.feikongbao.message.wechat.client.model.entiy.message_wechat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Map;
 
 /**
- * MessageWeChatMiniProgramData
+ * MessageWeChatClientMiniProgramData
  * @author Wang Zi Li
  * @date 2019/4/18 16:49
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"phoneNum","touser","templateId","url","miniprogram","data"})
 public class MessageWeChatTemplateData {
 
     /**

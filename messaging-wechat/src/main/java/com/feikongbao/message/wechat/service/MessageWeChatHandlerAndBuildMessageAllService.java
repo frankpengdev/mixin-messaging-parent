@@ -1,9 +1,7 @@
 package com.feikongbao.message.wechat.service;
 
-import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
 import com.feikongbao.message.wechat.exception.MessageWeChatException;
 import com.feikongbao.message.wechat.model.data_type.MessageWeChatResponseMessage;
-import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserMessageMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.message.wechat.util.WeChatMessageTypeEnum;
 import org.slf4j.Logger;
@@ -11,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Map;
 
 /**
@@ -28,8 +25,6 @@ public class MessageWeChatHandlerAndBuildMessageAllService {
     @Autowired
     private MessageWeChatHandlerWeChatDataService weChatDataService;
 
-    @Autowired
-    private MessageWeChatUserMessageMapper userMessageMapper;
 
     /**
      * Handler text message string.
@@ -41,7 +36,7 @@ public class MessageWeChatHandlerAndBuildMessageAllService {
      * @author zili.wang
      * @date 2019/05/08 16:14:32
      */
-    public String handlerTextMessage(MessageWeChatResponseMessage responseMessage,String openId,String requestContent){
+    public String handlerTextMessage(MessageWeChatResponseMessage responseMessage, String openId, String requestContent) {
 
         responseMessage.setCreateTime(System.currentTimeMillis());
         responseMessage.setMsgType(WeChatMessageTypeEnum.TEXT.name());
@@ -79,7 +74,7 @@ public class MessageWeChatHandlerAndBuildMessageAllService {
      * @author zili.wang
      * @date 2019 /05/08 16:14:39
      */
-    public String handlerEventMessage(MessageWeChatResponseMessage responseMessage, String openId, Map<String,String> requestMap){
+    public String handlerEventMessage(MessageWeChatResponseMessage responseMessage, String openId, Map<String, String> requestMap) {
         String event = requestMap.get("Event");
         String status = requestMap.get("Status");
         String msgId = requestMap.get("MsgID");
@@ -97,34 +92,21 @@ public class MessageWeChatHandlerAndBuildMessageAllService {
             responseMessage.setContent("您好，欢迎关注费控宝SAAS！\n\n请输入您的手机号码:\n\n根据提示完成绑定");
         }
 
-        // 模板消息发送成功 微信返回事件消息
-        String KEY_SUCCESS = "success";
-        //TODO
-        if(WeChatMessageTypeEnum.TEMPLATESENDJOBFINISH.name().equals(event.toUpperCase())){
-            if(KEY_SUCCESS.equals(status)){
-                //发送完成
-                MessageWeChatUserMessage weChatUserMessage = new MessageWeChatUserMessage();
-                weChatUserMessage.setUserOpenId(openId);
-                weChatUserMessage.setUserMessageStatus("COMPLETE");
-                weChatUserMessage.setUserMessageMsgId(msgId);
-                weChatUserMessage.setLastUpdateTime(Instant.now());
-                userMessageMapper.updateUserMessageStatus(weChatUserMessage);
-            }else {
-                // 失败重发
-                LOGGER.error("MESSAGE_WECHAT 发送模板消息失败: 消息ID: {}, 原因: {}",msgId,status);
-
-            }
+        // 模板消息 微信返回处理事件消息
+        if (WeChatMessageTypeEnum.TEMPLATESENDJOBFINISH.name().equals(event.toUpperCase())) {
+            weChatDataService.updateWeChatMessageStatus(status, openId, msgId);
         }
+
         //click事件
         String CLICK = "CLICK";
-        if(CLICK.equals(event)){
-            if(eventKey.equals("V1001_GOOD")){
+        if (CLICK.equals(event)) {
+            if (eventKey.equals("V1001_GOOD")) {
                 responseMessage.setCreateTime(System.currentTimeMillis());
                 responseMessage.setMsgType(WeChatMessageTypeEnum.TEXT.name());
                 responseMessage.setContent("谢谢点赞!");
 
             }
-            if("V1001_FEIKONGBAO_Mall".equals(eventKey)){
+            if ("V1001_FEIKONGBAO_Mall".equals(eventKey)) {
                 responseMessage.setCreateTime(System.currentTimeMillis());
                 responseMessage.setMsgType(WeChatMessageTypeEnum.TEXT.name());
                 responseMessage.setContent("开发中...正在努力 敬请期待！");
