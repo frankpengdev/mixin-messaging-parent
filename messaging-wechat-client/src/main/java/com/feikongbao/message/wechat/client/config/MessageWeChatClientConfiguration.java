@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Import;
  * @date 2019/5/21 11:25
  */
 @Configuration
-@ComponentScan(basePackages= {"com.feikongbao.message.wechat.client"})
-@Import(MessagingCoreConfig.class)
+@ComponentScan(basePackages = {"com.feikongbao.message.wechat.client"})
+@Import({MessagingCoreConfig.class, SwaggerConfig.class})
 public class MessageWeChatClientConfiguration {
 
 }

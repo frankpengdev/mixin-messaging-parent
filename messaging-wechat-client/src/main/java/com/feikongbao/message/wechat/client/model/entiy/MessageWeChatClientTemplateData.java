@@ -5,21 +5,26 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 import java.util.Map;
 
 /**
  * MessageWeChatClientMiniProgramData
+ *
  * @author Wang Zi Li
  * @date 2019/4/18 16:49
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"phoneNum","touser","templateId","url","miniprogram","data"})
+@JsonPropertyOrder({"phoneNum", "touser", "templateId", "url", "miniprogram", "data"})
 public class MessageWeChatClientTemplateData {
+
+    @JsonProperty("phone_num")
+    @NotEmpty(message = "The phone_num of MessageWeChatClientTemplateData can not be null")
+    @Pattern(regexp = "^((13[0-9])|(14[1,5,7,9])|(15[0-9])|(16[2,5,6,7])|(17[0-8])|(18[0-9])|(19[1,8,9]))\\d{8}$",
+            message = "The phoneNum of MessageWeChatClientTemplateData number format is wrong")
+    private String phoneNum;
 
     /**
      * 接收者openid
@@ -49,15 +54,13 @@ public class MessageWeChatClientTemplateData {
     @NotNull(message = "The data of MessageWeChatClientTemplateData can not be null")
     private Map<String, MessageWeChatClientTemplateDataValue> data;
 
-    @JsonProperty("phone_num")
-    private Long phoneNum;
 
-    public Long getPhoneNum() {
+    public String getPhoneNum() {
         return phoneNum;
     }
 
     @JsonIgnore
-    public void setPhoneNum(Long phoneNum) {
+    public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
 
