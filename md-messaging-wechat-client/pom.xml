@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.feikongbao</groupId>
-    <artifactId>messaging-wechat-client</artifactId>
+    <groupId>com.yodoo.megalodon</groupId>
+    <artifactId>md-messaging-wechat-client</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>feikongbao wechat client</name>
+    <name>md-messaging-swchat-client</name>
     <description>feikongbao wechat client</description>
 
     <parent>
-        <groupId>com.messaging</groupId>
-        <artifactId>messaging</artifactId>
+        <groupId>com.yodoo.megalodon</groupId>
+        <artifactId>md-messaging</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
@@ -23,8 +23,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.feikongbao.messaging.core</groupId>
-            <artifactId>messaging-core</artifactId>
+            <groupId>com.yodoo.megalodon</groupId>
+            <artifactId>md-messaging-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 

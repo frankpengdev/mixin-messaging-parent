@@ -4,24 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	    <groupId>com.messaging</groupId>
-		<artifactId>messaging</artifactId>
+		<groupId>com.yodoo.megalodon</groupId>
+		<artifactId>md-messaging</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<groupId>com.feikongbao.messaging.email.client</groupId>
-	<artifactId>messaging-email-client</artifactId>
+	<groupId>com.yodoo.megalodon</groupId>
+	<artifactId>md-messaging-core</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>messaging-email-client</name>
+	<name>md-messaging-core</name>
 	<description>Demo project for Spring Boot</description>
-
-	<!--<parent>
-		<groupId>com.feikongbao.parent</groupId>
-		<artifactId>feikongbao-parent</artifactId>
-		<version>1.0.0</version>
-	</parent>-->
 
 	<!--
 	<parent>
@@ -39,15 +33,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.feikongbao.messaging.core</groupId>
-			<artifactId>messaging-core</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.feikongbao.messaging.email.api</groupId>
-            <artifactId>messaging-email-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -57,16 +46,38 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
 		<!-- aop -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+
 		<!--<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8.1</version>
 		</dependency>-->
+		<!-- json -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+
 		<!-- MyBatis -->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
@@ -111,7 +122,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>-->
 

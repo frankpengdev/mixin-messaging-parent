@@ -12,11 +12,11 @@
     </parent>
 
     <!-- 包名 -->
-    <groupId>com.messaging</groupId>
-    <artifactId>messaging</artifactId>
+    <groupId>com.yodoo.megalodon</groupId>
+    <artifactId>md-messaging</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>messaging</name>
+    <name>md-messaging</name>
     <description>messaging project manage</description>
 
     <!-- 编码 -->
@@ -29,15 +29,17 @@
     <!-- 消息各子模块 -->
     <modules>
         <!-- 消息 rabbitmq 核发包 -->
-        <module>messaging-core</module>
+        <module>md-messaging-core</module>
         <!-- 发送邮件服务包 -->
-        <module>messaging-email</module>
+        <module>md-messaging-email</module>
         <!-- 发送邮件客户包 -->
-        <module>messaging-email-client</module>
+        <module>md-messaging-email-client</module>
         <!-- 邮件服务包和客户包实体 -->
-        <module>messaging-email-api</module>
+        <module>md-messaging-email-api</module>
         <!-- 发送微信服务包 -->
         <module>messaging-wechat</module>
+        <!-- 发送微信服务客户端包 -->
+        <module>md-messaging-wechat-client</module>
     </modules>
     <dependencies>
         <!-- springboot 启动器-->

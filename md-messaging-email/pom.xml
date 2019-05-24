@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	    <groupId>com.messaging</groupId>
-		<artifactId>messaging</artifactId>
+        <groupId>com.yodoo.megalodon</groupId>
+        <artifactId>md-messaging</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	
-    <groupId>com.feikongbao.messaging.email</groupId>
-    <artifactId>messaging-email</artifactId>
+    <groupId>com.yodoo.megalodon</groupId>
+    <artifactId>md-messaging-email</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>messaging-email</name>
+    <name>md-messaging-email</name>
     <description>Demo project for Spring Boot</description>
 
    <!--<parent>
@@ -38,13 +38,13 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.feikongbao.messaging.core</groupId>
-            <artifactId>messaging-core</artifactId>
+            <groupId>com.yodoo.megalodon</groupId>
+            <artifactId>md-messaging-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
        <dependency>
-           <groupId>com.feikongbao.messaging.email.api</groupId>
-           <artifactId>messaging-email-api</artifactId>
+           <groupId>com.yodoo.megalodon</groupId>
+           <artifactId>md-messaging-email-api</artifactId>
            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
