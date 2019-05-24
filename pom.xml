@@ -38,6 +38,7 @@
         <module>messaging-email-api</module>
         <!-- 发送微信服务包 -->
         <module>messaging-wechat</module>
+        <module>messaging-wechat-client</module>
     </modules>
     <dependencies>
         <!-- springboot 启动器-->
