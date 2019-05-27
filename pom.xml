@@ -36,7 +36,7 @@
         <!-- 邮件服务包和客户包实体 -->
         <module>md-messaging-email-api</module>
         <!-- 发送微信服务包 -->
-        <module>messaging-wechat</module>
+        <module>md-messaging-wechat</module>
         <!-- 发送微信服务客户端包 -->
         <module>md-messaging-wechat-client</module>
     </modules>
