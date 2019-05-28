@@ -15,7 +15,7 @@ import java.util.Date;
  * @author zili.wang
  * @date 2019/5/6 19:58
  */
-@Table(name = "wechat_user_info")
+@Table(name = "messaging_wechat_user_info")
 public class MessageWeChatUserInfo {
 
     @Id

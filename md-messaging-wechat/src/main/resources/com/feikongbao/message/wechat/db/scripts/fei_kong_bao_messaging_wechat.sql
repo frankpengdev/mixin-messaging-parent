@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `fei_kong_bao_messaging_wechat`.`wechat_user_info`;
-CREATE TABLE IF NOT EXISTS `fei_kong_bao_messaging_wechat`.`wechat_user_info`
+DROP TABLE IF EXISTS `test_company`.`wechat_user_info`;
+CREATE TABLE IF NOT EXISTS `test_company`.`wechat_user_info`
 (
   `user_info_id`         bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '表ID',
   `user_open_id`         varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT '用户的标识',

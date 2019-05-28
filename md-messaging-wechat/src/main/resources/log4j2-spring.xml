@@ -9,7 +9,7 @@
         </Console>
 
         <RollingFile name="RollingFile" fileName="logs/weChat-logFile.log"
-                     filePattern="logs/$${date:yyyy-MM}/weChat-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="logs/$${date:yyyy-MM}/weChat-%d{MM-dd-yyyy}-%i.log">
             <immediateFlush>true</immediateFlush>
             <PatternLayout>
                 <Pattern>%d %p %c{2} [%t] %m%n</Pattern>

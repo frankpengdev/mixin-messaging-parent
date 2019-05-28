@@ -28,7 +28,7 @@
 
     <insert id="insertWeChatUserInfo"
             parameterType="com.feikongbao.message.wechat.model.data_type.MessageWeChatUserInfo">
-        INSERT INTO wechat_user_info (
+        INSERT INTO messaging_wechat_user_info (
 			user_open_id,
 			user_phone_num,
 			user_subscribe,
@@ -62,7 +62,7 @@
 
     <select id="countSelectByOpenId" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT count(DISTINCT user_open_id)
-          FROM wechat_user_info wui
+          FROM messaging_wechat_user_info wui
          WHERE wui.user_open_id = #{openId, jdbcType = VARCHAR}
     </select>
 
@@ -86,17 +86,17 @@
                user_subscribe_scene,
                user_qr_scene,
                user_qr_scene_str
-          from wechat_user_info
+          from messaging_wechat_user_info
     </select>
 
     <delete id="deleteByOpenId" parameterType="java.lang.String">
-      DELETE FROM wechat_user_info
+      DELETE FROM messaging_wechat_user_info
        WHERE user_open_id = #{openId, jdbcType = VARCHAR}
     </delete>
 
     <select id="selectOpenIdByPhoneNum" parameterType="java.lang.Long" resultType="java.lang.String">
         SELECT wui.user_open_id
-          FROM wechat_user_info wui
+          FROM messaging_wechat_user_info wui
          WHERE wui.user_phone_num = #{userPhoneNum, jdbcType = DECIMAL}
     </select>
 

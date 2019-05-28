@@ -16,7 +16,7 @@
 
     <insert id="insert"
             parameterType="com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage">
-        INSERT INTO wechat_user_message
+        INSERT INTO messaging_wechat_user_message
           (user_phone_num,
            user_open_id,
            user_message_msg_id,
@@ -46,12 +46,12 @@
                last_update_time,
                user_message_content,
                err_message
-          from wechat_user_message
+          from messaging_wechat_user_message
     </select>
 
     <update id="updateUserMessageStatus"
             parameterType="com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage">
-        UPDATE wechat_user_message wum
+        UPDATE messaging_wechat_user_message wum
            SET wum.user_message_status = #{userMessageStatus,jdbcType=VARCHAR},
                wum.last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
          WHERE wum.user_open_id = #{userOpenId,jdbcType=VARCHAR}
@@ -63,7 +63,7 @@
                wum.user_message_msg_id,
                wum.user_message_status,
                wum.user_message_content
-          FROM wechat_user_message wum
+          FROM messaging_wechat_user_message wum
          WHERE wum.user_message_msg_id = #{userMessageMsgId,jdbcType=VARCHAR}
     </select>
 
