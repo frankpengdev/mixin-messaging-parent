@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="md-messaging-wechat">
+
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight{%-5level}{FATAL=Blinking bright red, ERROR=Bright red, WARN=Red, INFO=Blue, DEBUG=Normal, TRACE=Normal} %cyan{%logger} - %msg%n%throwable</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="RollingFile" fileName="logs/weChat-logFile.log"
+                     filePattern="logs/$${date:yyyy-MM}/weChat-%d{MM-dd-yyyy}-%i.log.gz">
+            <immediateFlush>true</immediateFlush>
+            <PatternLayout>
+                <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef level="DEBUG" ref="STDOUT"/>
+            <AppenderRef level="INFO" ref="RollingFile"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
