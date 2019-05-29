@@ -5,18 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description TODO
  * @Author jinjun_luo
- * @Date 2019/4/11 11:10
+ * @Date 2019/4/26 13:59
  **/
-public class ReturnedMessageStorageExample {
+public class MessagingCoreExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReturnedMessageStorageExample() {
+    public MessagingCoreExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

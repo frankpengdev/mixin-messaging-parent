@@ -3,11 +3,10 @@ package com.feikongbao.messaging.core.domain;
 import java.util.Date;
 
 /**
- * @Description TODO
  * @Author jinjun_luo
  * @Date 2019/4/26 13:59
  **/
-public class ReturnedMessageStorage {
+public class MessagingCore {
     private Long id;
 
     private Long userId;

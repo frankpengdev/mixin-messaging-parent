@@ -1,8 +1,8 @@
 package com.feikongbao.messaging.core.service;
 
 import com.feikongbao.messaging.core.config.MessagingCoreConfig;
-import com.feikongbao.messaging.core.domain.ReturnedMessageStorage;
-import com.feikongbao.messaging.core.mapper.ReturnedMessageStorageMapper;
+import com.feikongbao.messaging.core.domain.MessagingCore;
+import com.feikongbao.messaging.core.mapper.MessagingCoreMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * @Description TODO
+ * @Description 发送消息失败保存到数据库表
  * @Author jinjun_luo
  * @Date 2019/4/25 14:55
  **/
 @Service
 @Transactional(rollbackFor = Exception.class, transactionManager = MessagingCoreConfig.MESSAGE_CORE_TRANSACTION_MANAGER)
-public class ReturnedMessageStorageService {
+public class MessagingCoreService {
 
     @Autowired
-    private ReturnedMessageStorageMapper returnedMessageStorageMapper;
+    private MessagingCoreMapper messagingCoreMapper;
 
     /**
      * 保存消息从exchange 发到 queue 失败的数据
@@ -34,7 +34,7 @@ public class ReturnedMessageStorageService {
      * @return
      */
     public Integer saveReturnedMessageStorage(Long userId, String uuid, String exchange, String routingKey, int replyCode, String replyText, String messageJson){
-        ReturnedMessageStorage rms = new ReturnedMessageStorage();
+        MessagingCore rms = new MessagingCore();
         if (userId != null){
             rms.setUserId(userId);
         }
@@ -57,7 +57,7 @@ public class ReturnedMessageStorageService {
         rms.setStatus(0);
         rms.setCreateTime(new Date());
         rms.setUpdateTime(rms.getCreateTime());
-        return returnedMessageStorageMapper.insertSelective(rms);
+        return messagingCoreMapper.insertSelective(rms);
     }
 
 }

@@ -27,8 +27,7 @@ public class MailTest {
     public void testMail() throws Exception{
         MailEntity entity = new MailEntity();
         // 发件人
-//        entity.setFrom("test@jucaicat818.com");
-		 entity.setFrom("jinjun_luo@126.com");
+		 entity.setFrom("test_feikongbao@163.com");
 
         List<String> to = new ArrayList();
 		to.add("877745616@qq.com");
