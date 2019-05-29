@@ -3,7 +3,8 @@ package com.feikongbao.messaging.core.sender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.messaging.core.enums.MessagingEnum;
 import com.feikongbao.messaging.core.exception.MessagingCoreException;
-import com.feikongbao.messaging.core.service.ReturnedMessageStorageService;
+import com.feikongbao.messaging.core.service.MessagingCoreService;
+import com.yodoo.megalodon.datasource.config.RabbitMqConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,6 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -33,14 +33,14 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Value("${mq.confirm.retry.count}")
-    private int mqConfirmRetryCount;
+    @Autowired
+    private RabbitMqConfig rabbitMqConfig;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ReturnedMessageStorageService returnedMessageStorageService;
+    private MessagingCoreService messagingCoreService;
 
     /**
      * @Description 向消息队列发送消息,广播方式发送
@@ -109,6 +109,16 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
         rabbitTemplate.convertAndSend(exchange, routingKey, messagePayload, messagePostProcessor, callbackCorrelationData);
     }
 
+    /**
+     * 消费端自定义返回消息
+     * @Author 王自力
+     * @param exchange
+     * @param routingKey
+     * @param message
+     * @param userId
+     * @return
+     * @throws MessagingCoreException
+     */
     public Object sendAndReceiveMessage(String exchange, String routingKey,Object message, Long userId) throws MessagingCoreException {
         validationParameters(exchange, routingKey, message);
         return doSendAndReceiveMessage(exchange, routingKey, message, userId);
@@ -150,7 +160,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
             CallbackCorrelationData callbackCorrelationData = (CallbackCorrelationData) correlationData;
             //消息发送失败,就进行重试，重试过后还不能成功就记录到数据库
             T obj = (T)callbackCorrelationData.getMessage();
-            if (callbackCorrelationData.getRetryCount() < mqConfirmRetryCount) {
+            if (callbackCorrelationData.getRetryCount() < rabbitMqConfig.rabbitmqConfirmRetryCount) {
                 // 重试次数 + 1
                 callbackCorrelationData.setRetryCount(callbackCorrelationData.getRetryCount() + 1);
                 // 重发发消息
@@ -167,7 +177,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
                 }catch (Exception e){
                     logger.error("confirm object转json 异常");
                 }
-                 returnedMessageStorageService.saveReturnedMessageStorage(((CallbackCorrelationData) correlationData).getUserId(),
+                messagingCoreService.saveReturnedMessageStorage(((CallbackCorrelationData) correlationData).getUserId(),
                                                                             callbackCorrelationData.getId(), callbackCorrelationData.getExchange(),
                                                                             callbackCorrelationData.getRoutingKey(),0, cause, objJson);
                 logger.info("MQ消息重发失败，消息入库，消息ID：{}，消息体:{}", correlationData.getId(), obj);
@@ -200,7 +210,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
             // body
             objJson = objectMapper.writeValueAsString((T)objectMapper.readValue(message.getBody(), Object.class));
             // 保存到数据库
-            returnedMessageStorageService.saveReturnedMessageStorage(userId, uuid, exchange, routingKey, replyCode, replyText, objJson);
+            messagingCoreService.saveReturnedMessageStorage(userId, uuid, exchange, routingKey, replyCode, replyText, objJson);
             System.out.println("returnMessage 消息从交换器发送到队列失败:" + objJson + ",replyCode:" + replyCode + ",replyText:"
                                 + replyText + ",exchange:" + exchange + ",routingKey:" + routingKey);
         }catch (Exception e){

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.feikongbao.messaging.core.mapper.ReturnedMessageStorageMapper">
-  <resultMap id="BaseResultMap" type="com.feikongbao.messaging.core.domain.ReturnedMessageStorage">
+<mapper namespace="com.feikongbao.messaging.core.mapper.MessagingCoreMapper">
+  <resultMap id="BaseResultMap" type="com.feikongbao.messaging.core.domain.MessagingCore">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="message_uuid" jdbcType="VARCHAR" property="messageUuid" />
@@ -76,14 +76,14 @@
     id, user_id, message_uuid, exchange, routing_key, reply_code, reply_test, message_send, 
     status, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorageExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.feikongbao.messaging.core.domain.MessagingCoreExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from returned_message_storage
+    from messaging_core
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,21 +94,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from returned_message_storage
+    from messaging_core
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from returned_message_storage
+    delete from messaging_core
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorageExample">
-    delete from returned_message_storage
+  <delete id="deleteByExample" parameterType="com.feikongbao.messaging.core.domain.MessagingCoreExample">
+    delete from messaging_core
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorage">
-    insert into returned_message_storage (id, user_id, message_uuid, 
+  <insert id="insert" parameterType="com.feikongbao.messaging.core.domain.MessagingCore">
+    insert into messaging_core (id, user_id, message_uuid, 
       exchange, routing_key, reply_code, 
       reply_test, message_send, status, 
       create_time, update_time)
@@ -117,8 +117,8 @@
       #{replyTest,jdbcType=VARCHAR}, #{messageSend,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorage">
-    insert into returned_message_storage
+  <insert id="insertSelective" parameterType="com.feikongbao.messaging.core.domain.MessagingCore">
+    insert into messaging_core
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -190,14 +190,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorageExample" resultType="java.lang.Long">
-    select count(*) from returned_message_storage
+  <select id="countByExample" parameterType="com.feikongbao.messaging.core.domain.MessagingCoreExample" resultType="java.lang.Long">
+    select count(*) from messaging_core
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update returned_message_storage
+    update messaging_core
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -238,7 +238,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update returned_message_storage
+    update messaging_core
     set id = #{record.id,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=BIGINT},
       message_uuid = #{record.messageUuid,jdbcType=VARCHAR},
@@ -254,8 +254,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorage">
-    update returned_message_storage
+  <update id="updateByPrimaryKeySelective" parameterType="com.feikongbao.messaging.core.domain.MessagingCore">
+    update messaging_core
     <set>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
@@ -290,8 +290,8 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.feikongbao.messaging.core.domain.ReturnedMessageStorage">
-    update returned_message_storage
+  <update id="updateByPrimaryKey" parameterType="com.feikongbao.messaging.core.domain.MessagingCore">
+    update messaging_core
     set user_id = #{userId,jdbcType=BIGINT},
       message_uuid = #{messageUuid,jdbcType=VARCHAR},
       exchange = #{exchange,jdbcType=VARCHAR},

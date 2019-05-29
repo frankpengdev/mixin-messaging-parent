@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Description TODO
+ * @Description 用户启动服务
  * @Author jinjun_luo
  * @Date 2019/4/11 15:42
  * //@EnableAsync

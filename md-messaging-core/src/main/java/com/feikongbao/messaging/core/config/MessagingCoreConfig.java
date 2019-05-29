@@ -1,8 +1,9 @@
 package com.feikongbao.messaging.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.yodoo.megalodon.datasource.annotation.EnableCompanyDataSource;
+import com.yodoo.megalodon.datasource.annotation.EnableRabbitMqConfig;
+import com.yodoo.megalodon.datasource.config.RabbitMqConfig;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -15,7 +16,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,56 +35,14 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan(basePackages= {"com.feikongbao.messaging.core"})
 @MapperScan(basePackages = "com.feikongbao.messaging.core.mapper", sqlSessionFactoryRef = MessagingCoreConfig.MESSAGE_CORE_SQL_SESSION_FACTORY)
-@PropertySource({"com/feikongbao/messaging/core/messaging-core.properties"})
 @EnableTransactionManagement
+@EnableRabbitMqConfig
+@EnableCompanyDataSource
 public class MessagingCoreConfig {
 
     private final Logger logger = LoggerFactory.getLogger(MessagingCoreConfig.class);
-
-    @Value("${spring.rabbitmq.host}")
-    private String host;
-
-    @Value("${spring.rabbitmq.port}")
-    private int port;
-
-    @Value("${spring.rabbitmq.username}")
-    private String username;
-
-    @Value("${spring.rabbitmq.password}")
-    private String password;
-
-    @Value("${spring.rabbitmq.virtual-host}")
-    private String virtualHost;
-
-    @Value("${spring.rabbitmq.publisher-confirms}")
-    private boolean publisherConfirms;
-
-    @Value("${spring.rabbitmq.publisher-returns}")
-    private boolean publisherReturns;
-
-    @Value("${spring.rabbitmq.template.mandatory}")
-    private boolean mandatory;
-
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-
-    @Value("${spring.datasource.username}")
-    private String dbUserName;
-
-    @Value("${spring.datasource.password}")
-    private String dbPassword;
-
-    @Value("${spring.minimum.idle.size}")
-    private int minimumIdle;
-
-    @Value("${spring.maximum.pool.size}")
-    private int maximumPoolSize;
-
-    @Value("${spring.messaging.core.pool.name}")
-    private String messagingCorePoolName;
-
-    /** DataSource*/
-    public final static String MESSAGE_CORE_DATA_SOURCE = "messagingCoreDataSource";
+    @Autowired
+    private RabbitMqConfig rabbitMqConfig;
 
     /** DataSourceTransactionManager*/
     public final static String MESSAGE_CORE_TRANSACTION_MANAGER = "messageCoreTransactionManager";
@@ -93,44 +52,47 @@ public class MessagingCoreConfig {
 
 
     /**
-     * 连接工厂
+     * rabbitmq 连接工厂
      * @return
      */
     @Bean
     public ConnectionFactory connectionFactory() {
         // 地址和端口
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host,port);
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitMqConfig.rabbitmqUrlHost,rabbitMqConfig.rabbitmqUrlServicePort);
         // 用户名
-        connectionFactory.setUsername(username);
+        connectionFactory.setUsername(rabbitMqConfig.rabbitmqGeneralUsername);
         // 密码
-        connectionFactory.setPassword(password);
+        connectionFactory.setPassword(rabbitMqConfig.rabbitmqGeneralPassword);
         // 访问路径
-        connectionFactory.setVirtualHost(virtualHost);
+        connectionFactory.setVirtualHost(rabbitMqConfig.rabbitmqFeikongbaoVHost);
         // 消息发送到交换机确认机制，是否确认回调
-        connectionFactory.setPublisherConfirms(publisherConfirms);
+        connectionFactory.setPublisherConfirms(rabbitMqConfig.rabbitmqPublisherConfirms);
         // 消息从交换器发送到队列确认机制，是否确认回调
-        connectionFactory.setPublisherReturns(publisherReturns);
+        connectionFactory.setPublisherReturns(rabbitMqConfig.rabbitmqPublisherReturns);
         // connectionFactory.setChannelCacheSize();
         connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CONNECTION);
         return connectionFactory;
     }
 
     /**
-     * 通过连接工厂rabbitTemplate
+     * rabbitmq 通过连接工厂生成 rabbitTemplate
      * @return
      */
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         // 发送消息时设置强制标志,设置为true时return callback才生效
-        template.setMandatory(mandatory);
+        template.setMandatory(rabbitMqConfig.rabbitmqTemplateMandatory);
         // 对象转json
         template.setMessageConverter(new Jackson2JsonMessageConverter());
-        // TODO
-        System.out.println("创建RabbitTemplate成功----------------- " + template.toString());
+        logger.info("创建RabbitTemplate成功----------------->: {}", template.toString());
         return template;
     }
 
+    /**
+     * 系列化
+     * @return
+     */
     @Bean
     public ObjectMapper objectMapper(){
         ObjectMapper mapper = new ObjectMapper();
@@ -156,48 +118,25 @@ public class MessagingCoreConfig {
     // }
 
     /**
-     * dataSource
-     * @return
-     */
-    @Bean(MESSAGE_CORE_DATA_SOURCE)
-    public DataSource messagingCoreDataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setDriverClassName("com.mysql.jdbc.Driver");
-        config.setJdbcUrl(dbUrl);
-        config.setUsername(dbUserName);
-        config.setPassword(dbPassword);
-        config.setAutoCommit(true);
-        // 最小空闲连接数
-        config.setMinimumIdle(minimumIdle);
-        // 最大连接
-        config.setMaximumPoolSize(maximumPoolSize);
-        // 连接池名称
-        config.setPoolName(messagingCorePoolName);
-        return new HikariDataSource(config);
-    }
-
-    /**
-     * transaction
-     * @param messagingCoreDataSource
+     * 数据事务 transaction
+     * @param companyDataSource
      * @return
      */
     @Bean(MESSAGE_CORE_TRANSACTION_MANAGER)
-    public DataSourceTransactionManager transactionManager(DataSource messagingCoreDataSource) {
-        return new DataSourceTransactionManager(messagingCoreDataSource);
+    public DataSourceTransactionManager transactionManager(DataSource companyDataSource) {
+        return new DataSourceTransactionManager(companyDataSource);
     }
 
     /**
-     *  sqlSessionFactoryBean
-     * @param messagingCoreDataSource
+     *  数据库 sqlSessionFactoryBean
+     * @param companyDataSource
      * @return
      */
     @Bean(MESSAGE_CORE_SQL_SESSION_FACTORY)
-    public SqlSessionFactory sqlSessionFactory(DataSource messagingCoreDataSource) {
+    public SqlSessionFactory sqlSessionFactory(DataSource companyDataSource) {
         TransactionFactory transactionFactory = new SpringManagedTransactionFactory();
-        Environment environment = new Environment("development", transactionFactory, messagingCoreDataSource);
+        Environment environment = new Environment("development", transactionFactory, companyDataSource);
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration(environment);
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-        return sqlSessionFactory;
+        return new SqlSessionFactoryBuilder().build(configuration);
     }
 }
-
