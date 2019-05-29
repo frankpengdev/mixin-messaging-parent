@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `fei_kong_bao_messaging_wechat`.`wechat_user_message`;
-CREATE TABLE `fei_kong_bao_messaging_wechat`.`wechat_user_message`
+DROP TABLE IF EXISTS `test_company`.`wechat_user_message`;
+CREATE TABLE `test_company`.`wechat_user_message`
 (
   `user_message_id`      bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '表ID',
   `user_phone_num`       decimal(11, 0)                                          NOT NULL COMMENT '用户的电话号码',
