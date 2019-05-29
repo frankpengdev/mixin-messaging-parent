@@ -109,6 +109,21 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
         rabbitTemplate.convertAndSend(exchange, routingKey, messagePayload, messagePostProcessor, callbackCorrelationData);
     }
 
+    public Object sendAndReceiveMessage(String exchange, String routingKey,Object message, Long userId) throws MessagingCoreException {
+        validationParameters(exchange, routingKey, message);
+        return doSendAndReceiveMessage(exchange, routingKey, message, userId);
+    }
+
+    private Object doSendAndReceiveMessage(String exchange, String routingKey, Object messagePayload, Long userId) {
+        CallbackCorrelationData callbackCorrelationData = buildCorrelationData(messagePayload, exchange, routingKey, userId);
+        Map<String, Object> customMessageProperties = new HashMap<>();
+        customMessageProperties.put(MessagingEnum.FEIKONGBAO_USER_ID.name(), userId);
+        MessagePostProcessor messagePostProcessor = new FeikongbaoMessagePostProcessor(customMessageProperties);
+        rabbitTemplate.setReplyTimeout(10000L);
+        return rabbitTemplate.convertSendAndReceive(exchange, routingKey, messagePayload, messagePostProcessor, callbackCorrelationData);
+    }
+
+
     /**
      * 消息相关数据（消息ID）
      * @param message
