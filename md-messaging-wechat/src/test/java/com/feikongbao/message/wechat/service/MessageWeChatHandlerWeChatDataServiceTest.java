@@ -22,7 +22,6 @@ public class MessageWeChatHandlerWeChatDataServiceTest {
 
         try {
             String token = weChatDataService.getWeChatAccessToken();
-            System.out.println(token);
         } catch (MessageWeChatException e) {
             e.printStackTrace();
         }
