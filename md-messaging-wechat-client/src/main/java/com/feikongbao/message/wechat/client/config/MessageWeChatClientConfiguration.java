@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ComponentScan(basePackages = {"com.feikongbao.message.wechat.client"})
-@Import({MessagingCoreConfig.class, SwaggerConfig.class})
+@Import({MessagingCoreConfig.class})
 public class MessageWeChatClientConfiguration {
 
 }

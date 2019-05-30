@@ -2,16 +2,18 @@ package com.feikongbao.message.wechat.client.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateData;
-import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
-import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.messaging.core.aopaspect.MessageAckAop;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
-import com.feikongbao.messaging.core.receiver.ReceiverMessage;
 import com.rabbitmq.client.Channel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.*;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Service;
  * @date 2019/5/8 15:38
  */
 @Service
-public class MessageWeChatReceiveMsgService implements ReceiverMessage {
+public class MessageWeChatReceiveMsgService  {
 
     @Autowired
     private MessageWeChatSendTemplateMsgService templateMsgService;
@@ -35,8 +37,7 @@ public class MessageWeChatReceiveMsgService implements ReceiverMessage {
     ))
     @MessageAckAop
     @RabbitHandler
-    @Override
-    public void onMessage(Message message, Channel channel) throws Exception {
+    public String onMessage(Message message, Channel channel) throws Exception {
         if(message.getBody().length > 0){
             //处理消息
             ObjectMapper objectMapper = new ObjectMapper();
@@ -44,14 +45,15 @@ public class MessageWeChatReceiveMsgService implements ReceiverMessage {
 
             // 查询openId
             String openId = userInfoMapper.selectOpenIdByPhoneNum(templateData.getPhoneNum());
+            if(StringUtils.isEmpty(openId)){
+                return "FAIL: UNBOUND TELEPHONE NUMBER";
+            }
             templateData.setTouser(openId);
 
-            MessageWeChatUserMessage userMessage = new MessageWeChatUserMessage();
-            userMessage.setUserOpenId(openId);
-            userMessage.setUserPhoneNum(templateData.getPhoneNum());
-
             //发送消息
-            templateMsgService.sendTemplateMessage(templateData,userMessage);
+            return templateMsgService.sendTemplateMessage(templateData);
+
         }
+        return "FAIL";
     }
 }

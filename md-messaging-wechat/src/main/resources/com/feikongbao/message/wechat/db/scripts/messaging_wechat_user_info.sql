@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS `test_company`.`wechat_user_info`
   `user_subscribe_scene` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL DEFAULT NULL COMMENT '用户关注的渠道来源 ADD_SCENE_SEARCH 公众号搜索 ADD_SCENE_ACCOUNT_MIGRATION 公众号迁移 ADD_SCENE_PROFILE_CARD 名片分享 ADD_SCENE_QR_CODE 扫描二维码 ADD_SCENEPROFILE LINK 图文页内名称点击 ADD_SCENE_PROFILE_ITEM 图文页右上角菜单 ADD_SCENE_PAID 支付后关注 ADD_SCENE_OTHERS 其他',
   `user_qr_scene`        varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二维码扫码场景（开发者自定义）',
   `user_qr_scene_str`    varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '维码扫码场景描述（开发者自定义）',
+  `create_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `last_update_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '最后更改时间',
   PRIMARY KEY (`user_info_id`) USING BTREE,
   UNIQUE INDEX `index_openid` (`user_open_id`) USING BTREE COMMENT 'openid唯一索引',
   UNIQUE INDEX `index_phone_num` (`user_phone_num`) USING BTREE COMMENT 'phone num 唯一索引'

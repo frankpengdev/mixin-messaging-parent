@@ -53,7 +53,7 @@ public class MessageWeChatSendTemplateMsgService {
      * @author zili.wang
      * @date 2019/04/30 10:25:03
      */
-    public void sendTemplateMessage(MessageWeChatTemplateData templateData, MessageWeChatUserMessage userMessage) throws MessageWeChatException, MessagingCoreException {
+    public String sendTemplateMessage(MessageWeChatTemplateData templateData) throws MessageWeChatException, MessagingCoreException {
         //获取accessToken
         String accessToken = weChatDataService.getWeChatAccessTokenFromCache();
 
@@ -65,23 +65,14 @@ public class MessageWeChatSendTemplateMsgService {
         LOGGER.info("发送模板消息返回的结果: ErrCode: {}, ErrMsg: {}, MsgId: {}", weChatResponseEntity.getErrCode(),
                 weChatResponseEntity.getErrMsg(), weChatResponseEntity.getMsgId());
 
-        userMessage.setLastUpdateTime(Instant.now());
-        userMessage.setUserMessageContent(templateDataToString);
-        userMessage.setUserMessageMsgId(weChatResponseEntity.getMsgId());
-        userMessage.setErrMessage(weChatResponseEntity.getErrMsg());
-
-        // 发送成功 0
-        if ((WeChatHttpStatusCodeEnum.OK.getCode().toString()).equals(weChatResponseEntity.getErrCode())) {
-            //更改状态为已发送
-            userMessage.setUserMessageStatus("SEND");
-        } else {
-            userMessage.setUserMessageStatus("FAIL");
-            // 没成功的暂时写入日志 TODO
-            LOGGER.error("Send template message failed. ErrCode: {}, ErrMsg: {}", weChatResponseEntity.getErrCode(),
-                    weChatResponseEntity.getErrMsg());
+        String ERR_CODE = "0";
+        if(ERR_CODE.equals(weChatResponseEntity.getErrCode())){
+            return "SUCCESS";
+        }else {
+            StringBuffer stringBuffer = new StringBuffer("FAIL: ");
+            stringBuffer.append(weChatResponseEntity.getErrMsg());
+            return stringBuffer.toString();
         }
-
-        userMessageMapper.insert(userMessage);
 
     }
 
