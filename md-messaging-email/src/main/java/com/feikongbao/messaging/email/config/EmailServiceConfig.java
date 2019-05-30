@@ -13,7 +13,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 /**
- * @Description TODO
+ * @Description 邮箱服务器配置
  * @Author jinjun_luo
  * @Date 2019/4/17 11:07
 // **/

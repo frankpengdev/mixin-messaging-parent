@@ -1,7 +1,7 @@
 package com.feikongbao.messaging.email.api.exception;
 
 /**
- * @Description TODO
+ * @Description 发送邮件自定义异常
  * @Author jinjun_luo
  * @Date 2019/4/16 17:07
  **/

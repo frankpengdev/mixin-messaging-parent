@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @Description 用户启动服务
  * @Author jinjun_luo
  * @Date 2019/4/11 15:42
- * //@EnableAsync
  **/
 @Configuration
 @EnableAutoConfiguration
@@ -21,5 +20,4 @@ public class EmailServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(EmailServiceApplication.class, args);
     }
-
 }

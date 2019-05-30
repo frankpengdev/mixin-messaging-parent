@@ -1,7 +1,7 @@
 package com.feikongbao.messaging.email.api.constants;
 
 /**
- * @Description TODO
+ * @Description 发送邮件使用常量
  * @Author jinjun_luo
  * @Date 2019/4/12 13:46
  **/
