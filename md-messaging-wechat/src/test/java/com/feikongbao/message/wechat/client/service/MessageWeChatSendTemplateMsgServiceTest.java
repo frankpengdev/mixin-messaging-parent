@@ -80,7 +80,7 @@ public class MessageWeChatSendTemplateMsgServiceTest {
 
             userMessage.setUserMessageContent(msg);
 
-            templateMsgService.sendTemplateMessage(templateData,userMessage);
+            templateMsgService.sendTemplateMessage(templateData);
 
             flag="true";
         }

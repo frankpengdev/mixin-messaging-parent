@@ -71,7 +71,7 @@ public class MessageWeChatHandlerWeChatDataService {
         try {
             MessageWeChatTemplateData templateData =
                     MessageWeChatHelpUtil.json2Object(userMessage.getUserMessageContent(), MessageWeChatTemplateData.class);
-            sendTemplateMsgService.sendTemplateMessage(templateData, userMessage);
+            sendTemplateMsgService.sendTemplateMessage(templateData);
         } catch (MessageWeChatException e) {
             LOGGER.error("resendTemplateMessage error MessageWeChatException:" + e.getMessageBundleKey());
         } catch (MessagingCoreException e) {
