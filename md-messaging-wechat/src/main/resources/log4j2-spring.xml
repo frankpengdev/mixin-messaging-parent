@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" name="md-messaging-wechat">
+    <Properties>
+       <Property name="LOG_ROOT_DIR">/fkb-logs</Property>
+    </Properties>
 
     <Appenders>
         <Console name="STDOUT">
@@ -8,8 +11,8 @@
             </PatternLayout>
         </Console>
 
-        <RollingFile name="RollingFile" fileName="logs/weChat-logFile.log"
-                     filePattern="logs/$${date:yyyy-MM}/weChat-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="RollingFile" fileName="${LOG_ROOT_DIR}/messaging-wechat.log"
+                     filePattern="${LOG_ROOT_DIR}/$${date:yyyy-MM}/messaging-wechat-%d{MM-dd-yyyy}-%i.log">
             <immediateFlush>true</immediateFlush>
             <PatternLayout>
                 <Pattern>%d %p %c{2} [%t] %m%n</Pattern>
@@ -18,6 +21,7 @@
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
+            <DefaultRolloverStrategy max="20"/>
         </RollingFile>
 
     </Appenders>
