@@ -10,9 +10,7 @@ import java.util.List;
  * @Author jinjun_luo
  * @Date 2019/4/11 16:02
  **/
-public class MailEntity /*implements Serializable*/ {
-
-//    private static final long serialVersionUID = -7167590352111605597L;
+public class MailEntity {
 
     /*** 发件人*/
     private String from;

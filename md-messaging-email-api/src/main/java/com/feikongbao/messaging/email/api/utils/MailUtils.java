@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @Description TODO
+ * @Description 邮箱合法校验和非空参数校验
  * @Author jinjun_luo
  * @Date 2019/4/23 10:58
  **/
 public class MailUtils {
 
     /**
-     * 非空参数校验
+     * 非空参数校验 ： 发送和接收的邮箱
      * @param from
      * @param to
      * @throws EmailException
@@ -25,6 +25,15 @@ public class MailUtils {
         if (StringUtils.isBlank(from)){
             throw new EmailException("messaging-email.the.person.sending.the.email.is.empty");
         }
+        parameterValidation(to);
+    }
+
+    /**
+     * 非空参数校验 ： 接收的邮箱
+     * @param to
+     * @throws EmailException
+     */
+    public static void parameterValidation(List<String> to) throws EmailException {
         if (to == null || to.size() <= 0){
             throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
         }

@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.messaging.core.aopaspect.MessageAckAop;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.feikongbao.messaging.core.receiver.ReceiverMessage;
-import com.feikongbao.messaging.email.utils.BuildEmailService;
+import com.feikongbao.messaging.email.utils.BuildUserDefinedMailboxService;
 import com.rabbitmq.client.Channel;
+import com.yodoo.megalodon.datasource.config.EmailConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
@@ -35,8 +36,6 @@ import java.util.List;
 @Service
 public class SenderMailService implements ReceiverMessage {
 
-    // private static Logger logger = LoggerFactory.getLogger(SenderMailService.class);
-
     @Autowired
     private JavaMailSenderImpl mailSender;
 
@@ -44,7 +43,10 @@ public class SenderMailService implements ReceiverMessage {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private BuildEmailService buildEmailService;
+    private BuildUserDefinedMailboxService buildUserDefinedMailboxService;
+
+    @Autowired
+    private EmailConfig emailConfig;
 
     /**
      * 发送邮件
@@ -66,41 +68,42 @@ public class SenderMailService implements ReceiverMessage {
     public void onMessage(Message message, Channel channel) throws EmailException {
         try {
             MailEntity mailEntity = objectMapper.readValue(message.getBody(), MailEntity.class);
-
+            // 如果用户自定义邮箱服务器就用用户的邮箱服务器，没定义用公司默认的服务器
+            EmailServiceEntity emailServiceEntity = mailEntity.getEmailServiceEntity();
+            if (emailServiceEntity == null){
+                mailEntity.setFrom(emailConfig.emailServerUsername);
+            }else {
+                mailEntity.setFrom(emailServiceEntity.getUsername());
+            }
             //  非空参数校验
             MailUtils.parameterValidation(mailEntity.getFrom(),mailEntity.getTo());
-
             // 邮箱合法验证
             MailUtils.legalMailboxVerification(mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc());
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            // 判断是否有附件
-            boolean flg = CollectionUtils.isEmpty(mailEntity.getFilePaths());
             // 封装邮件信息
-            MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage,!flg,"UTF-8");
-            packageParameter(mmh, mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc(),mailEntity.getSubject(), mailEntity.getContent(), mailEntity.getFilePaths());
+            MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage,!CollectionUtils.isEmpty(mailEntity.getFilePaths()),"UTF-8");
 
+            packageParameter(mmh, mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc(),mailEntity.getSubject(), mailEntity.getContent(), mailEntity.getFilePaths());
             // 如果用户指定发送邮件的服务器，新创建邮件服务器发送，否则用本公司的邮件服务器发送
-            EmailServiceEntity emailServiceEntity = mailEntity.getEmailServiceEntity();
             if (emailServiceEntity == null){
                  mailSender.send(mimeMessage);
             }else {
                 // 参数校验
                 MailUtils.validationEmailService(emailServiceEntity);
                 // 创建发送邮件服务器对象
-                JavaMailSenderImpl javaMailSenderImpl = buildEmailService.build(emailServiceEntity);
+                JavaMailSenderImpl javaMailSenderImpl = buildUserDefinedMailboxService.build(emailServiceEntity);
                 // 发送
                 javaMailSenderImpl.send(mimeMessage);
             }
-            // 消费成功手动确认 为false时表示此条消息消费成功，为true时表示所有消息消费成功,已使用AOP处理
-            // channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            // 消费成功手动确认ACK 为false时表示此条消息消费成功，为true时表示所有消息消费成功,已使用AOP处理
         }catch (Exception e){
             throw new EmailException("messaging-email.system.excption.when.sending.mail");
         }
     }
 
     /**
-     *
+     * 封闭参数
      * @param mmh
      * @param from
      * @param to

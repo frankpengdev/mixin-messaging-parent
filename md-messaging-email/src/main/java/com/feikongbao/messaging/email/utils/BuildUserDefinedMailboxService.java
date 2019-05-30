@@ -14,7 +14,7 @@ import java.util.Properties;
  * @Date 2019/4/29 14:39
  **/
 @Service
-public class BuildEmailService {
+public class BuildUserDefinedMailboxService {
 
     @Autowired
     private EmailConfig emailConfig;
