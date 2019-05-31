@@ -1,6 +1,7 @@
 package com.feikongbao.messaging.email.client.config;
 
 import com.feikongbao.messaging.core.config.MessagingCoreConfig;
+import com.yodoo.megalodon.datasource.annotation.EnableEmailConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -12,9 +13,10 @@ import org.springframework.context.annotation.PropertySource;
  * @Date 2019/4/11 11:10
  **/
 @Configuration
-@ComponentScan(basePackages= {"com.feikongbao.messaging.email.client"})
+@ComponentScan(basePackages= {"com.feikongbao.messaging.email"})
 @PropertySource(value = {"/com/feikongbao/messaging/email/client/messaging-email-client.properties"})
 @Import(MessagingCoreConfig.class)
+@EnableEmailConfig
 public class EmailClientConfig {
 
 }

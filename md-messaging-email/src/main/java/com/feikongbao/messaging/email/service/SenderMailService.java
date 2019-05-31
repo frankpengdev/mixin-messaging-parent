@@ -48,6 +48,9 @@ public class SenderMailService implements ReceiverMessage {
     @Autowired
     private EmailConfig emailConfig;
 
+    @Autowired
+    private MailUtils mailUtils;
+
     /**
      * 发送邮件
      * @param message 消息：转成发送时的object
@@ -76,9 +79,9 @@ public class SenderMailService implements ReceiverMessage {
                 mailEntity.setFrom(emailServiceEntity.getUsername());
             }
             //  非空参数校验
-            MailUtils.parameterValidation(mailEntity.getFrom(),mailEntity.getTo());
+            mailUtils.parameterValidation(mailEntity.getFrom(),mailEntity.getTo());
             // 邮箱合法验证
-            MailUtils.legalMailboxVerification(mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc());
+            mailUtils.legalMailboxVerification(mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc());
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             // 封装邮件信息
@@ -90,7 +93,7 @@ public class SenderMailService implements ReceiverMessage {
                  mailSender.send(mimeMessage);
             }else {
                 // 参数校验
-                MailUtils.validationEmailService(emailServiceEntity);
+                mailUtils.validationEmailService(emailServiceEntity);
                 // 创建发送邮件服务器对象
                 JavaMailSenderImpl javaMailSenderImpl = buildUserDefinedMailboxService.build(emailServiceEntity);
                 // 发送

@@ -25,6 +25,9 @@ public class SenderMailService {
     @Autowired
     private SenderMessage<MailEntity> senderMessage;
 
+    @Autowired
+    private MailUtils mailUtils;
+
     /**
      * @param to ：收件人
      * @param cc ：抄送人
@@ -37,14 +40,14 @@ public class SenderMailService {
      */
     public void sendMail(List<String> to, List<String> cc, List<String> bcc, String subject, String content, List<String> attachment, Long userId, EmailServiceEntity emailServiceEntity) throws EmailException,MessagingCoreException {
         // 非空参数参数校验
-        MailUtils.parameterValidation(to);
+        mailUtils.parameterValidation(to);
         // 邮箱合法验证
-        MailUtils.legalMailboxVerification(emailServiceEntity == null ? null : emailServiceEntity.getUsername(), to, cc, bcc);
+        mailUtils.legalMailboxVerification(emailServiceEntity == null ? null : emailServiceEntity.getUsername(), to, cc, bcc);
         // 封装参数
         MailEntity mailEntity = packageParameter(to, cc, bcc, subject, content, attachment);
         // 如果指定邮件服务器不为空，参数校验
         if (emailServiceEntity != null){
-            MailUtils.validationEmailService(emailServiceEntity);
+            mailUtils.validationEmailService(emailServiceEntity);
             mailEntity.setEmailServiceEntity(emailServiceEntity);
         }
         senderMessage.sendMessage(AbstractMessagingConstants.DIRECT_MQ_EXCHANGE_EMAIL, AbstractMessagingConstants.DIRECT_MQ_ROUTINGKEY_EMAIL, mailEntity, userId);
