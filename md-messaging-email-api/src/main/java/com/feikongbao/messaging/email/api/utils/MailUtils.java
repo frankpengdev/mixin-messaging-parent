@@ -1,9 +1,11 @@
 package com.feikongbao.messaging.email.api.utils;
 
-import com.feikongbao.messaging.email.api.constants.AbstractMailConstants;
 import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
 import com.feikongbao.messaging.email.api.exception.EmailException;
+import com.yodoo.megalodon.datasource.config.EmailConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,7 +15,11 @@ import java.util.regex.Pattern;
  * @Author jinjun_luo
  * @Date 2019/4/23 10:58
  **/
+@Component
 public class MailUtils {
+
+    @Autowired
+    private EmailConfig emailConfig;
 
     /**
      * 非空参数校验 ： 发送和接收的邮箱
@@ -21,7 +27,7 @@ public class MailUtils {
      * @param to
      * @throws EmailException
      */
-    public static void parameterValidation(String from, List<String> to) throws EmailException {
+    public void parameterValidation(String from, List<String> to) throws EmailException {
         if (StringUtils.isBlank(from)){
             throw new EmailException("messaging-email.the.person.sending.the.email.is.empty");
         }
@@ -33,7 +39,7 @@ public class MailUtils {
      * @param to
      * @throws EmailException
      */
-    public static void parameterValidation(List<String> to) throws EmailException {
+    public void parameterValidation(List<String> to) throws EmailException {
         if (to == null || to.size() <= 0){
             throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
         }
@@ -46,7 +52,7 @@ public class MailUtils {
      * @param cc
      * @param bcc
      */
-    public static void legalMailboxVerification(String from, List<String> to, List<String> cc, List<String> bcc)throws EmailException {
+    public void legalMailboxVerification(String from, List<String> to, List<String> cc, List<String> bcc)throws EmailException {
         // 发件人
         if (StringUtils.isNotBlank(from)){
             checkEmail(from);
@@ -76,8 +82,8 @@ public class MailUtils {
      * @param email
      * @throws EmailException
      */
-    public static void checkEmail(String email) throws EmailException {
-        if (!Pattern.compile(AbstractMailConstants.RULE_EMAIL).matcher(email).matches()){
+    public void checkEmail(String email) throws EmailException {
+        if (!Pattern.compile(emailConfig.emailServerMailboxRegularExpression).matcher(email).matches()){
             throw new EmailException("messaging-email.is.not.a.legitimate.mailbox",email);
         }
     }
@@ -87,7 +93,7 @@ public class MailUtils {
      * @param emailServiceEntity
      * @throws EmailException
      */
-    public static void validationEmailService(EmailServiceEntity emailServiceEntity) throws EmailException {
+    public void validationEmailService(EmailServiceEntity emailServiceEntity) throws EmailException {
         // 指定邮件服务器地址
         if (StringUtils.isBlank(emailServiceEntity.getHost())){
             throw new EmailException("messaging-email.user.specified.mail.server.address.is.empty");
