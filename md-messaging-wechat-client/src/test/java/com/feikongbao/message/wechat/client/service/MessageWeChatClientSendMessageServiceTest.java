@@ -89,7 +89,7 @@ public class MessageWeChatClientSendMessageServiceTest {
     }
 
     @Test
-    //touser为空(目前user为空不会报错，返回ErrCode = 0，ErrMsg = SUCCESS )
+    //手机号格式错误
     public void testPhoneNumberFormatError() throws MessagingCoreException, IOException {
 
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("phoneNumberFormatErrorTemplate.json").getFile());
