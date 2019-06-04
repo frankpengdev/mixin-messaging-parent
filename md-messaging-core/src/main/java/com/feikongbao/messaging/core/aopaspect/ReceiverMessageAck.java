@@ -1,6 +1,7 @@
 package com.feikongbao.messaging.core.aopaspect;
 
 import com.feikongbao.messaging.core.enums.MessagingEnum;
+import com.feikongbao.messaging.core.exception.MessagingCoreException;
 import com.rabbitmq.client.Channel;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -45,15 +46,15 @@ public class ReceiverMessageAck {
      */
     @Around("Pointcut()")
     public Object aroundAckAop(ProceedingJoinPoint joinPoint) throws Throwable {
-        Long userId = 0L;
+        String userId = "";
         String uuid = "";
-        // try {
+         try {
             // 获取方法的两个参数 ： Message, Channel
             Object[] args = joinPoint.getArgs();
             Message message = (Message)args[0];
             MessageProperties messageProperties = message.getMessageProperties();
             uuid = (String)messageProperties.getHeaders().get("spring_returned_message_correlation");
-            userId = (Long)messageProperties.getHeaders().get(MessagingEnum.FEIKONGBAO_USER_ID.name());
+            userId = (String)messageProperties.getHeaders().get(MessagingEnum.FEIKONGBAO_USER_ID.name());
             Channel channel = (Channel)args[1];
             // 执行方法中
             Object object = joinPoint.proceed();
@@ -61,8 +62,8 @@ public class ReceiverMessageAck {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             logger.info("消息处理成功 userid:{}, messageUuid;{}", userId, uuid);
             return object;
-        // }catch (Exception e){
-        //     throw new MessagingCoreException("userId: (0)  messageUuid: (1) RabbitMQ message processing success returns confirmation ACK failure",userId.toString(), uuid);
-        // }
+         }catch (Exception e){
+             throw new MessagingCoreException("userId: (0)  messageUuid: (1) RabbitMQ message processing success returns confirmation ACK failure",userId.toString(), uuid);
+         }
     }
 }
