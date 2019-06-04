@@ -8,6 +8,9 @@ package com.feikongbao.messaging.core.enums;
  **/
 public enum MessagingEnum {
 
+	/** 编号 **/
+	APPID,
+
 	/** 用于发送消息的用户id*/
 	FEIKONGBAO_USER_ID,
 

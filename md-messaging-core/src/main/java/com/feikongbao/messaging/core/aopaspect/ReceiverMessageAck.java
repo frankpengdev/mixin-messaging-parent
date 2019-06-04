@@ -30,7 +30,7 @@ public class ReceiverMessageAck {
      *  @Pointcut("@annotation(com.feikongbao.messaging.core.aopaspect.MessageAckAop)")
      */
     @Pointcut("@annotation(com.feikongbao.messaging.core.aopaspect.MessageAckAop)")
-    public void Pointcut() {
+    public void pointcut() {
     }
 
     /**
@@ -44,7 +44,7 @@ public class ReceiverMessageAck {
      * @return  JoinPoint
      * @throws Throwable
      */
-    @Around("Pointcut()")
+    @Around("pointcut()")
     public Object aroundAckAop(ProceedingJoinPoint joinPoint) throws Throwable {
         String userId = "";
         String uuid = "";
