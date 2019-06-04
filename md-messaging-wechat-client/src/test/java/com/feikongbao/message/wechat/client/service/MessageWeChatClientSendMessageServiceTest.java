@@ -60,8 +60,8 @@ public class MessageWeChatClientSendMessageServiceTest {
             ObjectMapper objectMapper = new ObjectMapper();
             MessageWeChatClientTemplateData templateData = objectMapper.readValue(json, MessageWeChatClientTemplateData.class);
             ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,"1001");
-            //assertEquals("-1", rspMsg.getErrCode());
-            //assertEquals("FAIL: UNBOUND TELEPHONE NUMBER" ,rspMsg.getErrMsg());
+            assertEquals("-1", rspMsg.getErrCode());
+            assertEquals("FAIL: UNBOUND TELEPHONE NUMBER" ,rspMsg.getErrMsg());
 
     }
 
@@ -78,8 +78,8 @@ public class MessageWeChatClientSendMessageServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MessageWeChatClientTemplateData templateData = objectMapper.readValue(json, MessageWeChatClientTemplateData.class);
         ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,"1001");
-        //assertEquals("-1", rspMsg.getErrCode());
-        //assertEquals(rspMsg.getErrMsg().contains("FAIL: invalid template_id"), true);
+        assertEquals("-1", rspMsg.getErrCode());
+        assertEquals(rspMsg.getErrMsg().contains("FAIL: invalid template_id"), true);
     }
 
     /**
@@ -95,8 +95,8 @@ public class MessageWeChatClientSendMessageServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MessageWeChatClientTemplateData templateData = objectMapper.readValue(json, MessageWeChatClientTemplateData.class);
         ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,"1001");
-        //assertEquals("0", rspMsg.getErrCode());
-        //assertEquals("SUCCESS", rspMsg.getErrMsg());
+        assertEquals("0", rspMsg.getErrCode());
+        assertEquals("SUCCESS", rspMsg.getErrMsg());
     }
 
     /**
@@ -112,8 +112,8 @@ public class MessageWeChatClientSendMessageServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MessageWeChatClientTemplateData templateData = objectMapper.readValue(json, MessageWeChatClientTemplateData.class);
         ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,"1001");
-        //assertEquals("-1", rspMsg.getErrCode());
-        //assertEquals(rspMsg.getErrMsg().contains("number format is wrong"), true);
+        assertEquals("-1", rspMsg.getErrCode());
+        assertEquals(rspMsg.getErrMsg().contains("number format is wrong"), true);
     }
 
 }
