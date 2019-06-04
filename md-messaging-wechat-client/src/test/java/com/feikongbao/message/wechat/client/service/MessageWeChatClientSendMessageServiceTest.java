@@ -42,7 +42,7 @@ public class MessageWeChatClientSendMessageServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         MessageWeChatClientTemplateData templateData = objectMapper.readValue(json, MessageWeChatClientTemplateData.class);
 
-        ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,1001L);
+        ResponseData rspMsg = sendMessageService.sendMessageToMq(templateData,"1001");
         LOGGER.info("response message: " + rspMsg.getErrMsg());
     }
 }

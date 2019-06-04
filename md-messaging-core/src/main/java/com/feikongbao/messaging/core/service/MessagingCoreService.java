@@ -33,7 +33,7 @@ public class MessagingCoreService {
      * @param messageJson   发送失败的消息数据
      * @return
      */
-    public Integer saveReturnedMessageStorage(Long userId, String uuid, String exchange, String routingKey, int replyCode, String replyText, String messageJson){
+    public Integer saveReturnedMessageStorage(String userId, String uuid, String exchange, String routingKey, int replyCode, String replyText, String messageJson){
         MessagingCore rms = new MessagingCore();
         if (userId != null){
             rms.setUserId(userId);
