@@ -56,7 +56,7 @@ public abstract class AbstractMessagingConstants {
     /*** fanout 队列 名称 */
     public final static String FANOUT_MQ_QUEUES_TEST = "fanout.mq.queues.test";
 
-    // 微信公众号
+    /***  微信公众号 */
     public final static String DIRECT_MQ_QUEUES_WE_CHAT = "direct.mq.queues.wechat";
     public final static String DIRECT_MQ_EXCHANGE_WE_CHAT = "direct.mq.exchange.wechat";
     public final static String DIRECT_MQ_ROUTINGKEY_WE_CHAT = "direct.mq.routingkey.wechat";
