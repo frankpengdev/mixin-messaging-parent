@@ -40,7 +40,7 @@ public class MessageWeChatClientSendMessageService {
      * @date 2019/05/30 15:00:42
      */
     public ResponseData sendMessageToMq( MessageWeChatClientTemplateData templateData,
-                                        Long userId) throws MessagingCoreException {
+                                        String userId) throws MessagingCoreException {
         ResponseData responseData = new ResponseData();
         //验证数据
         BindingResult bindingResult = new BeanPropertyBindingResult(templateData,templateData.getClass().getSimpleName());

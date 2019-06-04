@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @Description TODO
+ * @Description 消息发送类
  * @Author jinjun_luo
  * @Date 2019/4/11 16:23
  **/
@@ -48,7 +48,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      * @param message 消息体
      * @throws MessagingCoreException
      */
-    public void broadcastMessage(String exchange, Object message,Long userId) throws MessagingCoreException {
+    public void broadcastMessage(String exchange, Object message,String userId) throws MessagingCoreException {
         validationParameters(exchange, message);
         doSendMessage(exchange,"",message, userId);
     }
@@ -60,7 +60,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      * @param message 消息体
      * @throws MessagingCoreException
      */
-    public void sendMessage(String exchange, String routingKey,Object message, Long userId) throws MessagingCoreException {
+    public void sendMessage(String exchange, String routingKey,Object message, String userId) throws MessagingCoreException {
         validationParameters(exchange, routingKey, message);
         doSendMessage(exchange, routingKey, message, userId);
     }
@@ -101,7 +101,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      * @param messagePayload
      * @throws MessagingCoreException
      */
-    private void doSendMessage(String exchange, String routingKey, Object messagePayload, Long userId) {
+    private void doSendMessage(String exchange, String routingKey, Object messagePayload, String userId) {
         CallbackCorrelationData callbackCorrelationData = buildCorrelationData(messagePayload, exchange, routingKey, userId);
         Map<String, Object> customMessageProperties = new HashMap<>();
         customMessageProperties.put(MessagingEnum.FEIKONGBAO_USER_ID.name(), userId);
@@ -119,12 +119,12 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      * @return
      * @throws MessagingCoreException
      */
-    public Object sendAndReceiveMessage(String exchange, String routingKey,Object message, Long userId) throws MessagingCoreException {
+    public Object sendAndReceiveMessage(String exchange, String routingKey,Object message, String userId) throws MessagingCoreException {
         validationParameters(exchange, routingKey, message);
         return doSendAndReceiveMessage(exchange, routingKey, message, userId);
     }
 
-    private Object doSendAndReceiveMessage(String exchange, String routingKey, Object messagePayload, Long userId) {
+    private Object doSendAndReceiveMessage(String exchange, String routingKey, Object messagePayload, String userId) {
         CallbackCorrelationData callbackCorrelationData = buildCorrelationData(messagePayload, exchange, routingKey, userId);
         Map<String, Object> customMessageProperties = new HashMap<>();
         customMessageProperties.put(MessagingEnum.FEIKONGBAO_USER_ID.name(), userId);
@@ -139,7 +139,7 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      * @param message
      * @return
      */
-    private CallbackCorrelationData buildCorrelationData(Object message, String exchange, String routingKey, Long userId) {
+    private CallbackCorrelationData buildCorrelationData(Object message, String exchange, String routingKey, String userId) {
         CallbackCorrelationData callbackCorrelationData = new CallbackCorrelationData(UUID.randomUUID().toString().replace("-", ""), message);
         callbackCorrelationData.setExchange(exchange);
         callbackCorrelationData.setRoutingKey(routingKey);
@@ -198,13 +198,13 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
      */
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-        Long userId = null;
+        String userId = null;
         String uuid = null;
         String objJson = null;
         try {
             Map<String, Object> headers = message.getMessageProperties().getHeaders();
             // userId
-            userId = (Long) headers.get(MessagingEnum.FEIKONGBAO_USER_ID.name());
+            userId = (String) headers.get(MessagingEnum.FEIKONGBAO_USER_ID.name());
             // uuid
             uuid = (String) headers.get("spring_returned_message_correlation");
             // body

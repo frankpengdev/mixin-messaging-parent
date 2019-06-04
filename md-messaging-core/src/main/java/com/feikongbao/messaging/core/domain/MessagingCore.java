@@ -9,7 +9,7 @@ import java.util.Date;
 public class MessagingCore {
     private Long id;
 
-    private Long userId;
+    private String userId;
 
     private String messageUuid;
 
@@ -37,11 +37,11 @@ public class MessagingCore {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

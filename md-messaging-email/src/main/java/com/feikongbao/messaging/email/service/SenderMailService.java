@@ -1,22 +1,21 @@
 package com.feikongbao.messaging.email.service;
 
-import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
-import com.feikongbao.messaging.email.api.entity.MailEntity;
-import com.feikongbao.messaging.email.api.exception.EmailException;
-import com.feikongbao.messaging.email.api.utils.MailUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.messaging.core.aopaspect.MessageAckAop;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.feikongbao.messaging.core.receiver.ReceiverMessage;
+import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
+import com.feikongbao.messaging.email.api.entity.MailEntity;
+import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
+import com.feikongbao.messaging.email.api.exception.EmailException;
+import com.feikongbao.messaging.email.api.utils.MailUtils;
 import com.feikongbao.messaging.email.utils.BuildUserDefinedMailboxService;
 import com.rabbitmq.client.Channel;
-import com.yodoo.megalodon.datasource.config.EmailConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,9 +23,10 @@ import org.springframework.util.CollectionUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
+import javax.mail.util.ByteArrayDataSource;
 import java.util.Date;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @Description 通过RabbitMQ 发送邮件
@@ -44,9 +44,6 @@ public class SenderMailService implements ReceiverMessage {
 
     @Autowired
     private BuildUserDefinedMailboxService buildUserDefinedMailboxService;
-
-    @Autowired
-    private EmailConfig emailConfig;
 
     @Autowired
     private MailUtils mailUtils;
@@ -71,29 +68,25 @@ public class SenderMailService implements ReceiverMessage {
     public void onMessage(Message message, Channel channel) throws EmailException {
         try {
             MailEntity mailEntity = objectMapper.readValue(message.getBody(), MailEntity.class);
-            // 如果用户自定义邮箱服务器就用用户的邮箱服务器，没定义用公司默认的服务器
-            EmailServiceEntity emailServiceEntity = mailEntity.getEmailServiceEntity();
-            if (emailServiceEntity == null){
-                mailEntity.setFrom(emailConfig.emailServerUsername);
-            }else {
-                mailEntity.setFrom(emailServiceEntity.getUsername());
-            }
             //  非空参数校验
-            mailUtils.parameterValidation(mailEntity.getFrom(),mailEntity.getTo());
+            mailUtils.parameterValidation(mailEntity);
             // 邮箱合法验证
-            mailUtils.legalMailboxVerification(mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc());
+            mailUtils.legalMailboxVerification(mailEntity);
 
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             // 封装邮件信息
-            MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage,!CollectionUtils.isEmpty(mailEntity.getFilePaths()),"UTF-8");
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,!CollectionUtils.isEmpty(mailEntity.getAddAttachments()),"UTF-8");
 
-            packageParameter(mmh, mailEntity.getFrom(), mailEntity.getTo(), mailEntity.getCc(), mailEntity.getBcc(),mailEntity.getSubject(), mailEntity.getContent(), mailEntity.getFilePaths());
+            packageParameter(mimeMessageHelper, mailEntity);
             // 如果用户指定发送邮件的服务器，新创建邮件服务器发送，否则用本公司的邮件服务器发送
+            EmailServiceEntity emailServiceEntity = mailEntity.getEmailServiceEntity();
             if (emailServiceEntity == null){
                  mailSender.send(mimeMessage);
             }else {
                 // 参数校验
                 mailUtils.validationEmailService(emailServiceEntity);
+                // 邮件合法检验
+                mailUtils.checkEmail(emailServiceEntity.getUsername());
                 // 创建发送邮件服务器对象
                 JavaMailSenderImpl javaMailSenderImpl = buildUserDefinedMailboxService.build(emailServiceEntity);
                 // 发送
@@ -107,43 +100,39 @@ public class SenderMailService implements ReceiverMessage {
 
     /**
      * 封闭参数
-     * @param mmh
-     * @param from
-     * @param to
-     * @param cc
-     * @param bcc
-     * @param subject
-     * @param content
-     * @param filePaths
+     * @param mimeMessageHelper
+     * @param mailEntity
      */
-    private void packageParameter(MimeMessageHelper mmh, String from, List<String> to, List<String> cc, List<String> bcc, String subject, String content, List<String> filePaths) throws MessagingException {
+    private void packageParameter(MimeMessageHelper mimeMessageHelper, MailEntity mailEntity) throws MessagingException {
         // 发送人
-        mmh.setFrom(from);
+        mimeMessageHelper.setFrom(mailEntity.getFrom());
         // 收件人
-        mmh.setCc(to.toArray(new String[to.size()]));
+        mimeMessageHelper.setCc(mailEntity.getTo().toArray(new String[mailEntity.getTo().size()]));
         // 抄送
-        if (!CollectionUtils.isEmpty(cc)){
-            mmh.setCc(cc.toArray(new String[cc.size()]));
+        if (!CollectionUtils.isEmpty(mailEntity.getCc())){
+            mimeMessageHelper.setCc(mailEntity.getCc().toArray(new String[mailEntity.getCc().size()]));
         }
         // mmh.setCc(mailEntity.getCc().stream().filter(Objects::nonNull).toArray(String[]::new));
         // 密送
-        if (!CollectionUtils.isEmpty(bcc)){
-            mmh.setBcc(bcc.toArray(new String[bcc.size()]));
+        if (!CollectionUtils.isEmpty(mailEntity.getBcc())){
+            mimeMessageHelper.setBcc(mailEntity.getBcc().toArray(new String[mailEntity.getBcc().size()]));
         }
         // 邮件标题
-        if (StringUtils.isNotBlank(subject)){
-            mmh.setSubject(subject);
+        if (StringUtils.isNotBlank(mailEntity.getSubject())){
+            mimeMessageHelper.setSubject(mailEntity.getSubject());
         }
         // 邮件正文
-        if (StringUtils.isNotBlank(content)){
-            mmh.setText(content);
+        if (StringUtils.isNotBlank(mailEntity.getContent())){
+            mimeMessageHelper.setText(mailEntity.getContent());
         }
         // 发送时间
-        mmh.setSentDate(new Date());
+        mimeMessageHelper.setSentDate(new Date());
         // 添加附件
-        if (!CollectionUtils.isEmpty(filePaths)){
-            for (String filePath : filePaths) {
-                mmh.addAttachment(filePath.substring(filePath.lastIndexOf(File.separator)),new FileSystemResource(new File(filePath)));
+        if (!CollectionUtils.isEmpty(mailEntity.getAddAttachments())){
+            Iterator<Map.Entry<String, byte[]>> iterator = mailEntity.getAddAttachments().entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry<String, byte[]> next = iterator.next();
+                mimeMessageHelper.addAttachment(next.getKey(), new ByteArrayDataSource(next.getValue(), MiMeTypeEnum.getBykey(mailUtils.getFileExt(next.getKey())).value));
             }
         }
     }
