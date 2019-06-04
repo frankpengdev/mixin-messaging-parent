@@ -3,7 +3,7 @@
 <mapper namespace="com.feikongbao.messaging.core.mapper.MessagingCoreMapper">
   <resultMap id="BaseResultMap" type="com.feikongbao.messaging.core.domain.MessagingCore">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="message_uuid" jdbcType="VARCHAR" property="messageUuid" />
     <result column="exchange" jdbcType="VARCHAR" property="exchange" />
     <result column="routing_key" jdbcType="VARCHAR" property="routingKey" />
@@ -112,7 +112,7 @@
       exchange, routing_key, reply_code, 
       reply_test, message_send, status, 
       create_time, update_time)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{messageUuid,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{messageUuid,jdbcType=VARCHAR},
       #{exchange,jdbcType=VARCHAR}, #{routingKey,jdbcType=VARCHAR}, #{replyCode,jdbcType=INTEGER}, 
       #{replyTest,jdbcType=VARCHAR}, #{messageSend,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
@@ -159,7 +159,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="messageUuid != null">
         #{messageUuid,jdbcType=VARCHAR},
@@ -203,7 +203,7 @@
         id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=BIGINT},
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.messageUuid != null">
         message_uuid = #{record.messageUuid,jdbcType=VARCHAR},
@@ -240,7 +240,7 @@
   <update id="updateByExample" parameterType="map">
     update messaging_core
     set id = #{record.id,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=VARCHAR},
       message_uuid = #{record.messageUuid,jdbcType=VARCHAR},
       exchange = #{record.exchange,jdbcType=VARCHAR},
       routing_key = #{record.routingKey,jdbcType=VARCHAR},
@@ -258,7 +258,7 @@
     update messaging_core
     <set>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="messageUuid != null">
         message_uuid = #{messageUuid,jdbcType=VARCHAR},
@@ -292,7 +292,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.feikongbao.messaging.core.domain.MessagingCore">
     update messaging_core
-    set user_id = #{userId,jdbcType=BIGINT},
+    set user_id = #{userId,jdbcType=VARCHAR},
       message_uuid = #{messageUuid,jdbcType=VARCHAR},
       exchange = #{exchange,jdbcType=VARCHAR},
       routing_key = #{routingKey,jdbcType=VARCHAR},

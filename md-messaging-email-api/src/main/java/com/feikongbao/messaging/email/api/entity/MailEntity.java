@@ -2,8 +2,11 @@ package com.feikongbao.messaging.email.api.entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 封装邮件实体
@@ -12,10 +15,13 @@ import java.util.List;
  **/
 public class MailEntity {
 
+    /** 用户id 可以为空**/
+    private String userId;
+
     /*** 发件人*/
     private String from;
 
-    /*** 邮件发送给谁 可以发送多个人*/
+    /*** 收件人 可以是多个人*/
     private List<String> to = new ArrayList<>();
 
     /*** 邮件抄送给谁 可以抄送多个人*/
@@ -31,10 +37,18 @@ public class MailEntity {
     private String content;
 
     /*** 附件*/
-    private List<String> filePaths = new ArrayList<>();
+    private Map<String, byte[]> addAttachments = new HashMap<>();
 
-    /** 用于指定邮件服务器传参*/
+    /** 指定邮箱服务，如果有需要指定的邮件服务器传参，如果没有指定邮件服务器传 null*/
     private EmailServiceEntity emailServiceEntity;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getFrom() {
         return from;
@@ -84,12 +98,12 @@ public class MailEntity {
         this.content = content;
     }
 
-    public List<String> getFilePaths() {
-        return filePaths;
+    public Map<String, byte[]> getAddAttachments() {
+        return addAttachments;
     }
 
-    public void setFilePaths(List<String> filePaths) {
-        this.filePaths = filePaths;
+    public void setAddAttachments(Map<String, byte[]> addAttachments) {
+        this.addAttachments = addAttachments;
     }
 
     public EmailServiceEntity getEmailServiceEntity() {

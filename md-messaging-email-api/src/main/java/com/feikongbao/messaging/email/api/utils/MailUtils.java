@@ -1,13 +1,16 @@
 package com.feikongbao.messaging.email.api.utils;
 
 import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
+import com.feikongbao.messaging.email.api.entity.MailEntity;
+import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
 import com.feikongbao.messaging.email.api.exception.EmailException;
 import com.yodoo.megalodon.datasource.config.EmailConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -23,56 +26,55 @@ public class MailUtils {
 
     /**
      * 非空参数校验 ： 发送和接收的邮箱
-     * @param from
-     * @param to
+     * @param mailEntity
      * @throws EmailException
      */
-    public void parameterValidation(String from, List<String> to) throws EmailException {
-        if (StringUtils.isBlank(from)){
+    public void parameterValidation(MailEntity mailEntity) throws EmailException {
+        // 发件人
+        if (mailEntity == null || StringUtils.isBlank(mailEntity.getFrom())){
             throw new EmailException("messaging-email.the.person.sending.the.email.is.empty");
         }
-        parameterValidation(to);
-    }
-
-    /**
-     * 非空参数校验 ： 接收的邮箱
-     * @param to
-     * @throws EmailException
-     */
-    public void parameterValidation(List<String> to) throws EmailException {
-        if (to == null || to.size() <= 0){
+        // 收件人
+        if (mailEntity == null || mailEntity.getTo() == null || mailEntity.getTo().size() <= 0){
             throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
+        }
+        // 如果有附件，附件名要符合发送条件，附件类型在MiMeTypeEnum类中
+        if (mailEntity.getAddAttachments() != null && mailEntity.getAddAttachments().size() > 0){
+            Iterator<Map.Entry<String, byte[]>> iterator = mailEntity.getAddAttachments().entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry<String, byte[]> next = iterator.next();
+                if (StringUtils.isBlank(MiMeTypeEnum.getBykey(getFileExt(next.getKey())).value)){
+                    throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
+                }
+            }
         }
     }
 
     /**
      * 邮件合法性验正
-     * @param from
-     * @param to
-     * @param cc
-     * @param bcc
+     * @param mailEntity
      */
-    public void legalMailboxVerification(String from, List<String> to, List<String> cc, List<String> bcc)throws EmailException {
+    public void legalMailboxVerification(MailEntity mailEntity)throws EmailException {
         // 发件人
-        if (StringUtils.isNotBlank(from)){
-            checkEmail(from);
+        if (mailEntity != null && StringUtils.isNotBlank(mailEntity.getFrom())){
+            checkEmail(mailEntity.getFrom());
         }
         // 收件人
-        if (to != null && to.size() > 0){
-            for (String t : to) {
-                checkEmail(t);
+        if (mailEntity != null && mailEntity.getTo() != null && mailEntity.getTo().size() > 0){
+            for (String to : mailEntity.getTo()) {
+                checkEmail(to);
             }
         }
         // 抄送人
-        if (cc != null && cc.size() > 0){
-            for (String c : cc) {
-                checkEmail(c);
+        if (mailEntity != null && mailEntity.getCc() != null && mailEntity.getCc().size() > 0){
+            for (String cc : mailEntity.getCc()) {
+                checkEmail(cc);
             }
         }
         // 密送人
-        if (bcc != null && bcc.size() > 0){
-            for (String b : bcc) {
-                checkEmail(b);
+        if (mailEntity != null && mailEntity.getBcc() != null && mailEntity.getBcc().size() > 0){
+            for (String bcc : mailEntity.getBcc()) {
+                checkEmail(bcc);
             }
         }
     }
@@ -95,16 +97,29 @@ public class MailUtils {
      */
     public void validationEmailService(EmailServiceEntity emailServiceEntity) throws EmailException {
         // 指定邮件服务器地址
-        if (StringUtils.isBlank(emailServiceEntity.getHost())){
+        if (emailServiceEntity == null || StringUtils.isBlank(emailServiceEntity.getHost())){
             throw new EmailException("messaging-email.user.specified.mail.server.address.is.empty");
         }
         // 指定邮件服务器用户名
-        if (StringUtils.isBlank(emailServiceEntity.getUsername())){
+        if (emailServiceEntity == null || StringUtils.isBlank(emailServiceEntity.getUsername())){
             throw new EmailException("messaging-email.user.specified.mail.server.username.is.empty");
         }
         // 指定邮件服务器密码
-        if (StringUtils.isBlank(emailServiceEntity.getPassword())){
+        if (emailServiceEntity == null || StringUtils.isBlank(emailServiceEntity.getPassword())){
             throw new EmailException("messaging-email.user.specified.mail.server.password.is.empty");
+        }
+    }
+
+    /**
+     * 获取文件后缀名（不带点）.
+     * @return 如："jpg" or "".
+     */
+    public String getFileExt(String fileName) {
+        if (StringUtils.isBlank(fileName) || !fileName.contains(".")) {
+            return "";
+        } else {
+            // 不带最后的点
+            return fileName.substring(fileName.lastIndexOf("."));
         }
     }
 }
