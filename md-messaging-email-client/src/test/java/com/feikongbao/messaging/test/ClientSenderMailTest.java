@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -61,15 +62,15 @@ public class ClientSenderMailTest {
     /** 附件: 如果测试需要发送附件， **/
     public Map<String, byte[]> getAttachment() throws Exception{
         Map<String, byte[]> attachmentMap = new HashMap<>();
-        String[] strings = new String[]{"001.jpg","002.jpg","003.jpg"};
+        String[] strings = new String[]{"001.jpg","002.jpg","003.jpg", "test.txt"};
         for (int i = 0; i< strings.length; i++){
             File file = new File("C:\\Users\\EDZ\\Desktop\\upload_test\\" + strings[i]);
-            InputStream inputStream = new FileInputStream(file);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes,0,inputStream.available());
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+            byte[] bytes = new byte[bufferedInputStream.available()];
+            bufferedInputStream.read(bytes,0,bufferedInputStream.available());
             attachmentMap.put(strings[i], bytes);
-            if (inputStream != null){
-                inputStream.close();
+            if (bufferedInputStream != null){
+                bufferedInputStream.close();
             }
         }
         return attachmentMap;
