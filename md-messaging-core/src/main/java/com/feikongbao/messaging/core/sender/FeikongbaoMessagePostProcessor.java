@@ -36,8 +36,8 @@ public class FeikongbaoMessagePostProcessor implements MessagePostProcessor {
         messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
         if (customMessageProperties.containsKey(MessagingEnum.FEIKONGBAO_USER_ID.name())) {
             messageProperties.getHeaders().put(MessagingEnum.FEIKONGBAO_USER_ID.name(),customMessageProperties.get(MessagingEnum.FEIKONGBAO_USER_ID.name()));
-        } else if (customMessageProperties.containsKey("appId")) {
-            message.getMessageProperties().setAppId(customMessageProperties.get("appId").toString());
+        } else if (customMessageProperties.containsKey(MessagingEnum.APPID.name())) {
+            message.getMessageProperties().setAppId(customMessageProperties.get(MessagingEnum.APPID.name()).toString());
         }
         return message;
     }

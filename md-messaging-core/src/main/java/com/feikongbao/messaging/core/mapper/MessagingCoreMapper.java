@@ -1,7 +1,6 @@
 package com.feikongbao.messaging.core.mapper;
 
 import com.feikongbao.messaging.core.domain.MessagingCore;
-import com.feikongbao.messaging.core.domain.MessagingCoreExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,25 +10,46 @@ import java.util.List;
  * @Date 2019/4/11 11:10
  **/
 public interface MessagingCoreMapper {
-    long countByExample(MessagingCoreExample example);
 
-    int deleteByExample(MessagingCoreExample example);
-
+    /**
+     * 通过主键删除
+     * @param id
+     * @return
+     */
     int deleteByPrimaryKey(Long id);
 
+    /**
+     * 插入，每个字段都要有值
+     * @param record
+     * @return
+     */
     int insert(MessagingCore record);
 
+    /**
+     * 插入，不是每个字段都要求有值
+     * @param record
+     * @return
+     */
     int insertSelective(MessagingCore record);
 
-    List<MessagingCore> selectByExample(MessagingCoreExample example);
-
+    /**
+     * 通过主键查询
+     * @param id
+     * @return
+     */
     MessagingCore selectByPrimaryKey(Long id);
 
-    int updateByExampleSelective(@Param("record") MessagingCore record, @Param("example") MessagingCoreExample example);
-
-    int updateByExample(@Param("record") MessagingCore record, @Param("example") MessagingCoreExample example);
-
+    /**
+     * 通过主键更新，部分字段
+     * @param record
+     * @return
+     */
     int updateByPrimaryKeySelective(MessagingCore record);
 
+    /**
+     * 通过主键更新，全部字段
+     * @param record
+     * @return
+     */
     int updateByPrimaryKey(MessagingCore record);
 }
