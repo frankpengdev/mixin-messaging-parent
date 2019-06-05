@@ -5,31 +5,27 @@
   "url":"http://www.baidu.com",
   "data": {
     "first": {
-      "value": "您好，你有一个申请已完成审批！测试：Template id不存在！",
+      "value": "模板2",
       "color": "#173177"
     },
     "keyword1": {
-      "value": "补签到",
+      "value": "流程审批",
       "color": "#173177"
     },
     "keyword2": {
-      "value": "忘记打卡",
+      "value": "李总",
       "color": "#173177"
     },
     "keyword3": {
-      "value": "通过",
+      "value": "2019.03.10 08:26",
       "color": "#173177"
     },
     "keyword4": {
-      "value": "还有29次机会",
-      "color": "#173177"
-    },
-    "keyword5": {
-      "value": "时间：2019-05-10 19:00:00",
+      "value": "流程审批测试",
       "color": "#173177"
     },
     "remark": {
-      "value": "测试：Template id不存在！",
+      "value": "测试模板2！",
       "color": "#173177"
     }
   }

@@ -144,7 +144,7 @@ public class TestMailService {
         return emailServiceEntity;
     }
 
-    /**  邮箱服务器 ——没有指定Password*/
+    /**  邮箱服务器 ——没有指定host*/
     private EmailServiceEntity buildMailServiceEntityHostIsEmpty(){
         EmailServiceEntity emailServiceEntity = new EmailServiceEntity();
         emailServiceEntity.setUsername("test_feikongbao@163.com");
