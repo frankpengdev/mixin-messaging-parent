@@ -52,7 +52,6 @@ public class MessageWeChatSendTemplateMsgServiceTest {
         objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
         MessageWeChatTemplateData templateData = objectMapper.readValue(json,MessageWeChatTemplateData.class);
 
-        String flag = null;
         if(MessageWeChatHelpUtil.validatePhoneNumber(templateData.getPhoneNum().toString())){
 
             templateData.setTouser("oSiOu5n0qijw0pIBuTZjNrAmauSY");
@@ -81,11 +80,7 @@ public class MessageWeChatSendTemplateMsgServiceTest {
             userMessage.setUserMessageContent(msg);
 
             templateMsgService.sendTemplateMessage(templateData);
-
-            flag="true";
         }
-
-        assertNotNull(flag);
 
     }
 

@@ -2,6 +2,7 @@ package com.feikongbao.message.wechat.client.service;
 
 import com.feikongbao.message.wechat.client.model.entiy.MessageWeChatClientTemplateData;
 import com.feikongbao.message.wechat.client.model.entiy.ResponseData;
+import com.feikongbao.message.wechat.client.util.MessageWeChatResponseStatusEnum;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.feikongbao.messaging.core.exception.MessagingCoreException;
 import com.feikongbao.messaging.core.sender.SenderMessage;
@@ -65,12 +66,12 @@ public class MessageWeChatClientSendMessageService {
 
         if (null == object) {
             responseData.setErrCode("0");
-            responseData.setErrMsg("SUCCESS NULL");
+            responseData.setErrMsg(MessageWeChatResponseStatusEnum.SUCCESS_NULL.name());
             return responseData;
         }
 
         String responseMessage = new String( ((byte[]) object),"UTF-8");
-        String SUCCESS = "SUCCESS";
+        String SUCCESS = MessageWeChatResponseStatusEnum.SUCCESS.name();
         if (responseMessage.startsWith(SUCCESS)) {
             responseData.setErrCode("0");
             responseData.setErrMsg(SUCCESS);
