@@ -10,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +29,7 @@ public class ClientSenderMailTest {
 
     /** 测试发送邮件 **/
     @Test
-    public void sendMailtest() throws Exception{
+    public void sendMailTest() throws Exception{
         MailEntity mailEntity = new MailEntity();
         mailEntity.setUserId("test_send_email_client");
         // 发件人
@@ -51,28 +47,25 @@ public class ClientSenderMailTest {
         mailEntity.setContent("为什么要学习Java? 因为学习Java他能发邮件。。。。，别的语言也可以，但我更喜欢Java");
 
         // 是否需要发送附件
-        // mailEntity.setAddAttachments(getAttachment());
+         mailEntity.setAddAttachments(getAttachmentBytes());
 
         // 是否指定邮箱服务器
-        // mailEntity.setEmailServiceEntity(buildMailServiceEntity());
+         mailEntity.setEmailServiceEntity(buildMailServiceEntity());
 
         senderMailService.sendMail(mailEntity);
     }
 
-    /** 附件: 如果测试需要发送附件， **/
-    public Map<String, byte[]> getAttachment() throws Exception{
+    /** bytes[] */
+    public Map<String, byte[]> getAttachmentBytes(){
         Map<String, byte[]> attachmentMap = new HashMap<>();
-        String[] strings = new String[]{"001.jpg","002.jpg","003.jpg", "test.txt"};
-        for (int i = 0; i< strings.length; i++){
-            File file = new File("C:\\Users\\EDZ\\Desktop\\upload_test\\" + strings[i]);
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            byte[] bytes = new byte[bufferedInputStream.available()];
-            bufferedInputStream.read(bytes,0,bufferedInputStream.available());
-            attachmentMap.put(strings[i], bytes);
-            if (bufferedInputStream != null){
-                bufferedInputStream.close();
-            }
-        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("特雷莎·梅即将走人 约翰逊多管齐下争夺首相宝座，");
+        stringBuilder.append("美英首脑记者会：双方期待英“脱欧”后达成双边贸易协议，");
+        stringBuilder.append("美国政府与国会联手 将对科技巨头进行反垄断调查</br>");
+        stringBuilder.append("韩军将领将任韩美联合演习总指挥 尝试收回战时作战指挥权，");
+        stringBuilder.append("俄试射“超快速度”反导拦截弹 摄影机都没追上，");
+        stringBuilder.append("坠海F-35A还没找到 日本防卫省就决定要复飞了。");
+        attachmentMap.put("rabbitmq_test.txt", stringBuilder.toString().getBytes());
         return attachmentMap;
     }
 

@@ -63,7 +63,7 @@ public class ReceiverMessageAck {
             logger.info("消息处理成功 userid:{}, messageUuid;{}", userId, uuid);
             return object;
          }catch (Exception e){
-             throw new MessagingCoreException("userId: (0)  messageUuid: (1) RabbitMQ message processing success returns confirmation ACK failure",userId.toString(), uuid);
+             throw new MessagingCoreException("userId: (0)  messageUuid: (1) RabbitMQ message processing success returns confirmation ACK failure",userId, uuid);
          }
     }
 }
