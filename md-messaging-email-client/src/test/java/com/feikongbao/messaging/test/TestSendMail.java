@@ -1,6 +1,5 @@
 package com.feikongbao.messaging.test;
 
-import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
 import com.feikongbao.messaging.email.api.entity.MailEntity;
 import com.feikongbao.messaging.email.api.exception.EmailException;
 import com.feikongbao.messaging.email.client.config.EmailClientConfig;
@@ -11,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,8 +81,7 @@ public class TestSendMail {
 
     }
 
-
-    /**  测试发送附件JPG */
+    /**  发送附件类型在MiMeTypeEnum中不存在， eg: 附件类型为：ABC */
     @Test
     public void testSendAttachment() throws Exception{
 
@@ -98,54 +93,25 @@ public class TestSendMail {
         mailEntity.setTo(to);
         mailEntity.setSubject("邮件主题：发送附件测试");
         mailEntity.setContent("邮件内容：Test123");
-        mailEntity.setAddAttachments(getAttachment());
-        // mailEntity.setEmailServiceEntity(buildMailServiceEntity());
-        senderMailService.sendMail(mailEntity);
-
-    }
-
-    /**  添加附件JPG **/
-    public Map<String, byte[]> getAttachment() throws Exception{
-        Map<String, byte[]> attachmentMap = new HashMap<>();
-        String[] strings = new String[]{"JPG.jpg"};
-        for (int i = 0; i< strings.length; i++){
-            File file = new File("D:\\test message\\" + strings[i]);
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-            byte[] bytes = new byte[bufferedInputStream.available()];
-            bufferedInputStream.read(bytes,0,bufferedInputStream.available());
-            attachmentMap.put(strings[i], bytes);
-            if (bufferedInputStream != null){
-                bufferedInputStream.close();
-            }
+        mailEntity.setAddAttachments(getAttachmentBytes());
+        try {
+            senderMailService.sendMail(mailEntity);
+            fail("should get exception: \"com.feikongbao.messaging.email.api.enums.MiMeTypeEnum中未找到key为.ABC的枚举\"");
+        }catch (IllegalArgumentException ex) {
+            assertThat(ex.getMessage(), containsString("com.feikongbao.messaging.email.api.enums.MiMeTypeEnum中未找到key为.ABC的枚举"));
         }
+
+
+    }
+
+
+    /**  添加附件类型为ABC */
+    public Map<String, byte[]> getAttachmentBytes(){
+        Map<String, byte[]> attachmentMap = new HashMap<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("测试附件类型不在MiMeTypeEnum");
+        attachmentMap.put("rabbitmq_test.ABC", stringBuilder.toString().getBytes());
         return attachmentMap;
-    }
-
-    /**  测试指定邮箱服务器 */
-    @Test
-    public void testMailService() throws Exception{
-
-        MailEntity mailEntity = new MailEntity();
-        //mailEntity.setUserId("user310");
-        mailEntity.setFrom("test_feikongbao@163.com");
-        List<String> to = new ArrayList();
-        to.add("jinjing@yodoo.net.cn");
-        mailEntity.setTo(to);
-        mailEntity.setSubject("邮件主题：测试指定邮箱服务器");
-        //mailEntity.setContent("邮件内容：Test123");
-        mailEntity.setEmailServiceEntity(buildMailServiceEntity());
-        senderMailService.sendMail(mailEntity);
-
-
-    }
-
-    /**  指定邮箱服务器 */
-    private EmailServiceEntity buildMailServiceEntity(){
-        EmailServiceEntity emailServiceEntity = new EmailServiceEntity();
-        emailServiceEntity.setUsername("test_feikongbao@163.com");
-        emailServiceEntity.setPassword("feikongbao1234");
-        emailServiceEntity.setHost("smtp.163.com");
-        return emailServiceEntity;
     }
 
 }
