@@ -3,6 +3,7 @@ package com.feikongbao.message.wechat.client.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateData;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
+import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.messaging.core.aopaspect.MessageAckAop;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.rabbitmq.client.Channel;
@@ -17,12 +18,14 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author zili.wang
  * @date 2019/5/8 15:38
  */
 @Service
-public class MessageWeChatReceiveMsgService  {
+public class MessageWeChatReceiveMsgService {
 
     @Autowired
     private MessageWeChatSendTemplateMsgService templateMsgService;
@@ -34,25 +37,23 @@ public class MessageWeChatReceiveMsgService  {
             value = @Queue(value = AbstractMessagingConstants.DIRECT_MQ_QUEUES_WE_CHAT, autoDelete = "false"),
             exchange = @Exchange(value = AbstractMessagingConstants.DIRECT_MQ_EXCHANGE_WE_CHAT, type = ExchangeTypes.DIRECT),
             key = AbstractMessagingConstants.DIRECT_MQ_ROUTINGKEY_WE_CHAT
-    ))
-    @MessageAckAop
+    ), concurrency = "10")
     @RabbitHandler
     public String onMessage(Message message, Channel channel) throws Exception {
-        if(message.getBody().length > 0){
+        if (message.getBody().length > 0) {
             //处理消息
-            ObjectMapper objectMapper = new ObjectMapper();
-            MessageWeChatTemplateData templateData = objectMapper.readValue(message.getBody(), MessageWeChatTemplateData.class);
+            MessageWeChatTemplateData templateData = MessageWeChatHelpUtil.json2Object(message.getBody(),
+                    MessageWeChatTemplateData.class);
 
             // 查询openId
             String openId = userInfoMapper.selectOpenIdByPhoneNum(templateData.getPhoneNum());
-            if(StringUtils.isEmpty(openId)){
+            if (StringUtils.isEmpty(openId)) {
                 return "FAIL: UNBOUND TELEPHONE NUMBER";
             }
             templateData.setTouser(openId);
 
             //发送消息
             return templateMsgService.sendTemplateMessage(templateData);
-
         }
         return "FAIL";
     }

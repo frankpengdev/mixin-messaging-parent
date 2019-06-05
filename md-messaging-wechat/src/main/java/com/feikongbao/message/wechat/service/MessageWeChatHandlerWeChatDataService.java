@@ -1,6 +1,5 @@
 package com.feikongbao.message.wechat.service;
 
-import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateData;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
 import com.feikongbao.message.wechat.client.service.MessageWeChatSendTemplateMsgService;
 import com.feikongbao.message.wechat.exception.MessageWeChatException;
@@ -9,7 +8,6 @@ import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserMessageMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.message.wechat.util.MessageWeChatRequestUrlEnum;
-import com.feikongbao.messaging.core.exception.MessagingCoreException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,21 +62,6 @@ public class MessageWeChatHandlerWeChatDataService {
     @Autowired
     private MessageWeChatSendTemplateMsgService sendTemplateMsgService;
 
-    // TODO
-    public void resendTemplateMessage(String messageId) {
-        MessageWeChatUserMessage userMessage = userMessageMapper.selectMessageContentByMessageId(messageId);
-        try {
-            MessageWeChatTemplateData templateData =
-                    MessageWeChatHelpUtil.json2Object(userMessage.getUserMessageContent(), MessageWeChatTemplateData.class);
-            sendTemplateMsgService.sendTemplateMessage(templateData);
-        } catch (MessageWeChatException e) {
-            LOGGER.error("resendTemplateMessage error MessageWeChatException:" + e.getMessageBundleKey());
-        } catch (MessagingCoreException e) {
-            LOGGER.error("resendTemplateMessage error MessagingCoreException:" + e.getMessageBundleKey());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 将微信返回的模板消息处理结果更新到对应的消息中
