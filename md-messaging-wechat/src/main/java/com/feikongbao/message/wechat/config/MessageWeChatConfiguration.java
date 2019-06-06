@@ -2,7 +2,6 @@ package com.feikongbao.message.wechat.config;
 
 import com.feikongbao.messaging.core.config.MessagingCoreConfig;
 import com.yodoo.megalodon.datasource.annotation.EnableCompanyDataSource;
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,7 +12,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -22,7 +24,6 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import javax.sql.DataSource;
-import java.util.Base64;
 
 /**
  * 配置类
@@ -31,7 +32,6 @@ import java.util.Base64;
  * @date
  */
 @ComponentScan(basePackages = {"com.feikongbao.message.wechat"})
-@PropertySource("/com/feikongbao/message/wechat/wechat_config.properties")
 @MapperScan(value = {"com.feikongbao.message.wechat.model.mapper"},
         sqlSessionFactoryRef = MessageWeChatConfiguration.WECHAT_SQL_SESSION_FACTORY_BEAN_NAME,
         sqlSessionTemplateRef = MessageWeChatConfiguration.WECHAT_SQL_SESSION_TEMPLATE_BEAN_NAME)

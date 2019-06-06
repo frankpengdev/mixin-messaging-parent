@@ -85,6 +85,8 @@ public class MessagingCoreConfig {
         template.setMandatory(rabbitMqConfig.rabbitmqTemplateMandatory);
         // 对象转json
         template.setMessageConverter(new Jackson2JsonMessageConverter());
+        //等待答复时间
+        template.setReplyTimeout(rabbitMqConfig.rabbitmqReplyTimeout);
         logger.info("创建RabbitTemplate成功----------------->: {}", template.toString());
         return template;
     }
