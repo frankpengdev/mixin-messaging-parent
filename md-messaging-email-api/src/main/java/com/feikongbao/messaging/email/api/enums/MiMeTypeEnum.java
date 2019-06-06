@@ -116,10 +116,6 @@ public enum MiMeTypeEnum {
 
     private static final EnumFindHelper<MiMeTypeEnum, String> KEY_FIND_HELPER = EnumFindHelper
             .of(MiMeTypeEnum.class, e -> e.key);
-
-    private static final EnumFindHelper<MiMeTypeEnum, String> VALUE_FIND_HELPER = EnumFindHelper
-            .of(MiMeTypeEnum.class, e -> e.value);
-
     
     /**
      * 根据编码查找枚举
@@ -133,22 +129,6 @@ public enum MiMeTypeEnum {
         MiMeTypeEnum r = KEY_FIND_HELPER.find(key, null);
         if (Objects.isNull(r)) {
             throw new IllegalArgumentException(MiMeTypeEnum.class.getCanonicalName() + "中未找到key为" + key + "的枚举. ");
-        }
-        return r;
-    }
-
-    /**
-     * 根据名称查找枚举
-     *
-     * @param typeName 名称
-     * @return 名称对应的枚举
-     * @throws IllegalArgumentException 未找到枚举
-     */
-    public static MiMeTypeEnum getByTypeName(String typeName) {
-        MiMeTypeEnum r = VALUE_FIND_HELPER.find(typeName, null);
-        if (Objects.isNull(r)) {
-            throw new IllegalArgumentException(
-                    MiMeTypeEnum.class.getCanonicalName() + "中未找到typeName为" + typeName + "的枚举. ");
         }
         return r;
     }

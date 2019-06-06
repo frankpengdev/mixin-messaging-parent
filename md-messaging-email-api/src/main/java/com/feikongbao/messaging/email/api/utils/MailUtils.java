@@ -33,20 +33,20 @@ public class MailUtils {
      */
     public void parameterValidation(MailEntity mailEntity) throws EmailException {
         // 发件人
-        if (mailEntity == null || StringUtils.isBlank(mailEntity.getFrom())){
+        if (mailEntity == null || StringUtils.isBlank(mailEntity.getFrom())) {
             throw new EmailException("messaging-email.the.person.sending.the.email.is.empty");
         }
         // 收件人
-        if (mailEntity == null || mailEntity.getTo() == null || mailEntity.getTo().size() <= 0){
+        if (mailEntity == null || mailEntity.getTo() == null || mailEntity.getTo().size() <= 0) {
             throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
         }
         // 如果有附件，附件名要符合发送条件，附件类型在MiMeTypeEnum类中
-        if (mailEntity.getAddAttachments() != null && mailEntity.getAddAttachments().size() > 0){
+        if (mailEntity.getAddAttachments() != null && mailEntity.getAddAttachments().size() > 0) {
             Iterator<Map.Entry<String, byte[]>> iterator = mailEntity.getAddAttachments().entrySet().iterator();
             while (iterator.hasNext()){
                 Map.Entry<String, byte[]> next = iterator.next();
-                if (StringUtils.isBlank(MiMeTypeEnum.getBykey(getFileExt(next.getKey())).value)){
-                    throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
+                if (StringUtils.isBlank(MiMeTypeEnum.getBykey(getFileExt(next.getKey())).value)) {
+                    throw new EmailException("messaging-email.attachment.type.error attachmentName: (0)", next.getKey());
                 }
             }
         }
