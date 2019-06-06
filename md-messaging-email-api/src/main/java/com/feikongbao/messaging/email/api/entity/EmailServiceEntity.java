@@ -25,7 +25,7 @@ public class EmailServiceEntity {
     /** 是否需要认证,不指定默认为 true*/
     private Boolean auth;
 
-    /** 编码 默认, 不指定默认为 TUF-8*/
+    /** 编码 默认, 不指定默认为 UTF-8*/
     private String encoding;
 
     public String getUsername() {
