@@ -9,16 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,7 +47,7 @@ public class MessageWeChatServletControllerTest {
      */
     @Test
     public void doPost() throws Exception {
-
+        //手机用户18221509132已绑定微信公众号
         String xml = "<xml>\n" +
                 "  <ToUserName><![CDATA[gh_885efa1734b6]]></ToUserName>\n" +
                 "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
@@ -67,6 +60,21 @@ public class MessageWeChatServletControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
                 .content(xml)
                 .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
+
+        //手机用户15900804993已取消微信公众号的绑定
+        String xml2 = "<xml>\n" +
+                "  <ToUserName><![CDATA[oSiOu5v5gHLdnph2IjASloOt7-Bk]]></ToUserName>\n" +
+                "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
+                "  <CreateTime>1558494080</CreateTime>\n" +
+                "  <MsgType><![CDATA[text]]></MsgType>\n" +
+                "  <Content><![CDATA[15900804993]]></Content>\n" +
+                "  <MsgId></MsgId>\n" +
+                "</xml>";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
+                .content(xml2)
+                .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
+
 
     }
 }

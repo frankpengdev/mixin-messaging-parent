@@ -50,7 +50,7 @@ public class TestSendMail {
             // mailEntity.setEmailServiceEntity(buildMailServiceEntity());
             try {
                 senderMailService.sendMail(mailEntity);
-                fail("should get exception");
+                fail("should get exception:\"messaging-email.the.person.receiving.the.email.is.empty\"");
             } catch (EmailException ex) {
                 assertThat(ex.getMessage(), containsString("messaging-email.the.person.receiving.the.email.is.empty"));
             }
