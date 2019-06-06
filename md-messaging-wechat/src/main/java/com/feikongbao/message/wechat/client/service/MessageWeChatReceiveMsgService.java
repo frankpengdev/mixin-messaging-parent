@@ -1,10 +1,8 @@
 package com.feikongbao.message.wechat.client.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatTemplateData;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
-import com.feikongbao.messaging.core.aopaspect.MessageAckAop;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.rabbitmq.client.Channel;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +16,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author zili.wang

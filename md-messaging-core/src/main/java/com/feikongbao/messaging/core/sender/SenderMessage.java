@@ -129,7 +129,6 @@ public class SenderMessage<T> implements RabbitTemplate.ConfirmCallback, RabbitT
         Map<String, Object> customMessageProperties = new HashMap<>();
         customMessageProperties.put(MessagingEnum.FEIKONGBAO_USER_ID.name(), userId);
         MessagePostProcessor messagePostProcessor = new FeikongbaoMessagePostProcessor(customMessageProperties);
-        rabbitTemplate.setReplyTimeout(10000L);
         return rabbitTemplate.convertSendAndReceive(exchange, routingKey, messagePayload, messagePostProcessor, callbackCorrelationData);
     }
 
