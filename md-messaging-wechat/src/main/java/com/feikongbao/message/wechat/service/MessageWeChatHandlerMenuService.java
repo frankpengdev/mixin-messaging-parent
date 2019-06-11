@@ -61,7 +61,7 @@ public class MessageWeChatHandlerMenuService {
     }
 
     private String handleResponseMsg(String responseMsg) throws DocumentException {
-        Map<String, String> map = MessageWeChatHelpUtil.xml2Map(responseMsg);
+        Map<String, String> map = MessageWeChatHelpUtil.json2Map(responseMsg);
         boolean errCode = WeChatHttpStatusCodeEnum.OK.getCode().equals(map.get("errcode"));
         if (!errCode) {
             return map.get("errmsg");
