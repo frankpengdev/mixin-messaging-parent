@@ -1,18 +1,14 @@
 package com.feikongbao.message.wechat.service;
 
-import com.feikongbao.message.wechat.client.model.entiy.message_wechat.MessageWeChatUserMessage;
-import com.feikongbao.message.wechat.client.service.MessageWeChatSendTemplateMsgService;
 import com.feikongbao.message.wechat.exception.MessageWeChatException;
 import com.feikongbao.message.wechat.model.data_type.MessageWeChatUserInfo;
 import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserInfoMapper;
-import com.feikongbao.message.wechat.model.mapper.MessageWeChatUserMessageMapper;
 import com.feikongbao.message.wechat.util.MessageWeChatHelpUtil;
 import com.feikongbao.message.wechat.util.MessageWeChatRequestUrlEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,37 +52,7 @@ public class MessageWeChatHandlerWeChatDataService {
     @Autowired
     private MessageWeChatUserInfoMapper weChatInfoMapper;
 
-    @Autowired
-    private MessageWeChatUserMessageMapper userMessageMapper;
 
-    @Autowired
-    private MessageWeChatSendTemplateMsgService sendTemplateMsgService;
-
-
-    /**
-     * 将微信返回的模板消息处理结果更新到对应的消息中
-     *
-     * @param status the status
-     * @param openId the open id
-     * @param msgId  the msg id
-     * @author zili.wang
-     * @date 2019/05/21 20:57:45
-     */
-    @Transactional(propagation = Propagation.NOT_SUPPORTED, transactionManager = "messageWeChatTransactionManager")
-    public void updateWeChatMessageStatus(String status, String openId, String msgId) {
-        MessageWeChatUserMessage weChatUserMessage = new MessageWeChatUserMessage();
-        weChatUserMessage.setUserOpenId(openId);
-        weChatUserMessage.setUserMessageMsgId(msgId);
-        weChatUserMessage.setLastUpdateTime(Instant.now());
-        String KEY_SUCCESS = "success";
-        if (KEY_SUCCESS.equals(status)) {
-            weChatUserMessage.setUserMessageStatus("COMPLETE");
-        }else {
-            weChatUserMessage.setUserMessageStatus("TODO");
-        }
-        weChatUserMessage.setErrMessage(status);
-        userMessageMapper.updateUserMessageStatus(weChatUserMessage);
-    }
 
     /**
      * Delete user by open id.
@@ -202,43 +168,5 @@ public class MessageWeChatHandlerWeChatDataService {
 
     }
 
-    /**
-     * Gets we chat user open id.
-     *
-     * @param code the code
-     * @return the we chat user open id
-     * @throws MessageWeChatException the message wechat exception
-     * @author zili.wang
-     * @date 2019/05/06 20:22:34
-     */
-    public String getWeChatUserOpenId(String code) throws MessageWeChatException {
-        ConcurrentHashMap<String, String> paramsHashMap = new ConcurrentHashMap<>(16);
-        paramsHashMap.put("appId", WECHAT_APP_ID);
-        paramsHashMap.put("secret", WECHAT_APP_SECRET);
-        paramsHashMap.put("code", code);
 
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(WEB_ACCESS_TOKEN, String.class, paramsHashMap);
-        String responseMessage = responseEntity.getBody().toString();
-
-        Map<String, String> responseOpenHashMap = MessageWeChatHelpUtil.json2Map(responseMessage);
-
-        if (null != responseOpenHashMap.get(ERR_CODE)) {
-            String errMsg = responseOpenHashMap.get("responseHashMap");
-            throw new MessageWeChatException("BAD_REQUEST123{0}", errMsg);
-        }
-
-        //网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
-        String accessToken = responseOpenHashMap.get("accessToken");
-        //access_token接口调用凭证超时时间，单位（秒）
-        String expiresIn = responseOpenHashMap.get("expiresIn");
-        //用户刷新access_token
-        String refreshToken = responseOpenHashMap.get("refreshToken");
-        //用户唯一标识，请注意，在未关注公众号时，用户访问公众号的网页，也会产生一个用户和公众号唯一的OpenID
-        String openId = responseOpenHashMap.get("openId");
-        //用户授权的作用域，使用逗号（,）分隔
-        String scope = responseOpenHashMap.get("scope");
-
-        return openId;
-
-    }
 }

@@ -61,7 +61,7 @@ public class MessageWeChatServletControllerTest {
                 .content(xml)
                 .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
 
-        //手机用户15900804993已取消微信公众号的绑定
+        //手机用户15900804993已绑定手机号
         String xml2 = "<xml>\n" +
                 "  <ToUserName><![CDATA[oSiOu5v5gHLdnph2IjASloOt7-Bk]]></ToUserName>\n" +
                 "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
@@ -73,6 +73,51 @@ public class MessageWeChatServletControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
                 .content(xml2)
+                .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
+
+
+        //手机用户15900804993已取消微信公众号的绑定
+        String xml3 = "<xml>\n" +
+                "  <ToUserName><![CDATA[oSiOu5v5gHLdnph2IjASloOt7-Bk]]></ToUserName>\n" +
+                "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
+                "  <CreateTime>1558494080</CreateTime>\n" +
+                "  <MsgType><![CDATA[event]]></MsgType>\n" +
+                "  <Event><![CDATA[unsubscribe]]></Event>\n" +
+                "  <Content><![CDATA[15900804993]]></Content>\n" +
+                "  <MsgId></MsgId>\n" +
+                "</xml>";
+        mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
+                .content(xml3)
+                .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
+
+
+        //手机用户15900804993关注微信公众号
+        String xml4 = "<xml>\n" +
+                "  <ToUserName><![CDATA[oSiOu5v5gHLdnph2IjASloOt7-Bk]]></ToUserName>\n" +
+                "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
+                "  <CreateTime>1558494080</CreateTime>\n" +
+                "  <MsgType><![CDATA[event]]></MsgType>\n" +
+                "  <Event><![CDATA[subscribe]]></Event>\n" +
+                "  <Content><![CDATA[15900804993]]></Content>\n" +
+                "  <MsgId></MsgId>\n" +
+                "</xml>";
+        mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
+                .content(xml4)
+                .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
+
+
+        //手机用户15900804993已绑定手机号
+        String xml5 = "<xml>\n" +
+                "  <ToUserName><![CDATA[oSiOu5v5gHLdnph2IjASloOt7-Bk]]></ToUserName>\n" +
+                "  <FromUserName><![CDATA[oSiOu5n0qijw0pIBuTZjNrAmauSY]]></FromUserName>\n" +
+                "  <CreateTime>1558494080</CreateTime>\n" +
+                "  <MsgType><![CDATA[text]]></MsgType>\n" +
+                "  <Content><![CDATA[15900804993]]></Content>\n" +
+                "  <MsgId></MsgId>\n" +
+                "</xml>";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/WeChatServlet?signature=7188435702c9b36e5975daeeb67e5f2763280385&timestamp=1558494080&nonce=981940637&openid=oSiOu5n0qijw0pIBuTZjNrAmauSY")
+                .content(xml5)
                 .characterEncoding("UTF-8")).andReturn().getResponse().getContentAsString();
 
 
