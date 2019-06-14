@@ -42,7 +42,7 @@ public class TestMailService {
         to.add("jinjing@yodoo.net.cn");
         mailEntity.setTo(to);
         mailEntity.setSubject("邮件主题：测试指定邮箱服务器");
-        //mailEntity.setContent("邮件内容：Test123");
+        mailEntity.setContent("邮件内容：Test123");
         mailEntity.setEmailServiceEntity(buildMailServiceEntity());
         senderMailService.sendMail(mailEntity);
     }

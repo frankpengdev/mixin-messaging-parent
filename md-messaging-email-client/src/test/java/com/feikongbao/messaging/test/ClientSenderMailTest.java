@@ -50,7 +50,7 @@ public class ClientSenderMailTest {
          mailEntity.setAddAttachments(getAttachmentBytes());
 
         // 是否指定邮箱服务器
-         mailEntity.setEmailServiceEntity(buildMailServiceEntity());
+//         mailEntity.setEmailServiceEntity(buildMailServiceEntity());
 
         senderMailService.sendMail(mailEntity);
     }
