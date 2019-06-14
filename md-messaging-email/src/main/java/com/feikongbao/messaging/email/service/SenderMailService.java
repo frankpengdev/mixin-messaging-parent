@@ -8,10 +8,13 @@ import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
 import com.feikongbao.messaging.email.api.entity.MailEntity;
 import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
 import com.feikongbao.messaging.email.api.exception.EmailException;
+import com.feikongbao.messaging.email.api.utils.JsonUtils;
 import com.feikongbao.messaging.email.api.utils.MailUtils;
 import com.feikongbao.messaging.email.utils.BuildUserDefinedMailboxService;
 import com.rabbitmq.client.Channel;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.*;
@@ -35,6 +38,8 @@ import java.util.Map;
  **/
 @Service
 public class SenderMailService implements ReceiverMessage {
+
+    private static Logger logger = LoggerFactory.getLogger(SenderMailService.class);
 
     @Autowired
     private JavaMailSenderImpl mailSender;
@@ -94,6 +99,7 @@ public class SenderMailService implements ReceiverMessage {
             }
             // 消费成功手动确认ACK 为false时表示此条消息消费成功，为true时表示所有消息消费成功,已使用AOP处理
         }catch (Exception e){
+            logger.error("sending mail error:",JsonUtils.obj2json(e));
             throw new EmailException("messaging-email.system.excption.when.sending.mail");
         }
     }

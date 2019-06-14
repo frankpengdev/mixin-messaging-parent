@@ -40,6 +40,14 @@ public class MailUtils {
         if (mailEntity == null || mailEntity.getTo() == null || mailEntity.getTo().size() <= 0) {
             throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
         }
+        // 标题
+        if (mailEntity == null || StringUtils.isBlank(mailEntity.getSubject())){
+            throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
+        }
+        // 正文
+        if (mailEntity == null || StringUtils.isBlank(mailEntity.getContent())){
+            throw new EmailException("messaging-email.the.person.receiving.the.email.is.empty");
+        }
         // 如果有附件，附件名要符合发送条件，附件类型在MiMeTypeEnum类中
         if (mailEntity.getAddAttachments() != null && mailEntity.getAddAttachments().size() > 0) {
             Iterator<Map.Entry<String, byte[]>> iterator = mailEntity.getAddAttachments().entrySet().iterator();
