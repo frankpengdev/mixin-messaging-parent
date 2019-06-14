@@ -113,7 +113,7 @@ public class SenderMailService implements ReceiverMessage {
         // 发送人
         mimeMessageHelper.setFrom(mailEntity.getFrom());
         // 收件人
-        mimeMessageHelper.setCc(mailEntity.getTo().toArray(new String[mailEntity.getTo().size()]));
+        mimeMessageHelper.setTo(mailEntity.getTo().toArray(new String[mailEntity.getTo().size()]));
         // 抄送
         if (!CollectionUtils.isEmpty(mailEntity.getCc())){
             mimeMessageHelper.setCc(mailEntity.getCc().toArray(new String[mailEntity.getCc().size()]));
@@ -124,13 +124,9 @@ public class SenderMailService implements ReceiverMessage {
             mimeMessageHelper.setBcc(mailEntity.getBcc().toArray(new String[mailEntity.getBcc().size()]));
         }
         // 邮件标题
-        if (StringUtils.isNotBlank(mailEntity.getSubject())){
-            mimeMessageHelper.setSubject(mailEntity.getSubject());
-        }
+        mimeMessageHelper.setSubject(mailEntity.getSubject());
         // 邮件正文
-        if (StringUtils.isNotBlank(mailEntity.getContent())){
-            mimeMessageHelper.setText(mailEntity.getContent());
-        }
+        mimeMessageHelper.setText(mailEntity.getContent());
         // 发送时间
         mimeMessageHelper.setSentDate(new Date());
         // 添加附件

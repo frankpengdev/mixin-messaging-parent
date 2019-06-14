@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description 测试发送邮件
@@ -37,20 +34,21 @@ public class ClientSenderMailTest {
         // 接收人的邮箱
         List<String> to = new ArrayList();
         to.add("877745616@qq.com");
+        to.add("jinjing@yodoo.net.cn");
         mailEntity.setTo(to);
         // 抄送
-        mailEntity.setCc(to);
+        mailEntity.setCc(Arrays.asList("geniusjj_joe@hotmail.com"));
         // 密送
-        mailEntity.setBcc(to);
+        mailEntity.setBcc(Arrays.asList("geniusjj@qq.com"));
         mailEntity.setSubject("RabbitMQ测试发送邮件客户端");
         // 正文
         mailEntity.setContent("为什么要学习Java? 因为学习Java他能发邮件。。。。，别的语言也可以，但我更喜欢Java");
 
         // 是否需要发送附件
-         mailEntity.setAddAttachments(getAttachmentBytes());
+        mailEntity.setAddAttachments(getAttachmentBytes());
 
         // 是否指定邮箱服务器
-//         mailEntity.setEmailServiceEntity(buildMailServiceEntity());
+        // mailEntity.setEmailServiceEntity(buildMailServiceEntity());
 
         senderMailService.sendMail(mailEntity);
     }
