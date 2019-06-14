@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * 实现 json xml object之间的转换
  *
  * @author zili.wang
- * @date 2019/5/6 15:15
+ * @date 2019 /5/6 15:15
  */
 @SuppressWarnings("Duplicates")
 public class MessageWeChatHelpUtil {
@@ -142,6 +142,21 @@ public class MessageWeChatHelpUtil {
 
     public static <T> T json2Object(byte[] json, Class<T> valueType) throws IOException {
         return (T) objectMapper.readValue(json, valueType);
+    }
+
+    /**
+     * 格式化json字符串
+     *
+     * @param json the json
+     * @return the string
+     * @throws IOException the io exception
+     * @author zili.wang
+     * @date 2019 /06/13 20:35:00
+     */
+    public static String formatJson(String json) throws IOException {
+        Object obj = objectMapper.readValue(json, Object.class);
+        String jsonFormat = objectMapper.writeValueAsString(obj);
+        return jsonFormat;
     }
 
 }
