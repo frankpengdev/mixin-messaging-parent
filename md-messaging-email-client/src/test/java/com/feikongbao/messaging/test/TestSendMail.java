@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Java6Assertions.fail;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -80,6 +81,54 @@ public class TestSendMail {
         }
 
     }
+
+    /**  邮件主题为空 */
+    @Test
+    public void testSubjectIsEmpty() throws Exception{
+
+        MailEntity mailEntity = new MailEntity();
+        mailEntity.setUserId("user310");
+        mailEntity.setFrom("test_feikongbao@163.com");
+        List<String> to = new ArrayList();
+        to.add("jinjing@yodoo.net.cn");
+        mailEntity.setTo(to);
+        mailEntity.setSubject(null);
+        mailEntity.setContent("邮件内容：测试邮件主题为空");
+
+        try {
+            senderMailService.sendMail(mailEntity);
+            fail("should get exception: \"messaging-email.user.send.mail.the.subject.is.empty\"");
+        } catch (EmailException ex) {
+            assertEquals("messaging-email.user.send.mail.the.subject.is.empty", ex.getMessageBundleKey());
+
+        }
+
+    }
+
+
+    /**  邮件内容为空 */
+    @Test
+    public void testContentIsEmpty() throws Exception{
+
+        MailEntity mailEntity = new MailEntity();
+        mailEntity.setUserId("user310");
+        mailEntity.setFrom("test_feikongbao@163.com");
+        List<String> to = new ArrayList();
+        to.add("jinjing@yodoo.net.cn");
+        mailEntity.setTo(to);
+        mailEntity.setSubject("邮件内容：测试邮件内容为空");
+        mailEntity.setContent(null);
+
+        try {
+            senderMailService.sendMail(mailEntity);
+            fail("should get exception: \"messaging-email.user.send.mail.the.content.is.empty\"");
+        } catch (EmailException ex) {
+            assertEquals("messaging-email.user.send.mail.the.content.is.empty", ex.getMessageBundleKey());
+
+        }
+
+    }
+
 
     /**  发送附件类型在MiMeTypeEnum中不存在， eg: 附件类型为：ABC */
     @Test
