@@ -23,7 +23,7 @@ public class CallbackCorrelationData extends CorrelationData {
     private int retryCount = 0;
 
     /*** 用户id */
-    private Long userId;
+    private String userId;
 
     public CallbackCorrelationData() {
         super();
@@ -70,11 +70,11 @@ public class CallbackCorrelationData extends CorrelationData {
         this.routingKey = routingKey;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

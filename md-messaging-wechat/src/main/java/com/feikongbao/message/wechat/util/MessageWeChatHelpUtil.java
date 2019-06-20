@@ -24,14 +24,19 @@ import java.util.regex.Pattern;
  * 实现 json xml object之间的转换
  *
  * @author zili.wang
- * @date 2019/5/6 15:15
+ * @date 2019 /5/6 15:15
  */
+@SuppressWarnings("Duplicates")
 public class MessageWeChatHelpUtil {
     /**
      * 手机正则表达式
      */
     private static final String REG_EXP = "^((13[0-9])|(14[1,5,7,9])|(15[0-9])|(16[2,5,6,7])|(17[0-8])|(18[0-9])|(19[1,8,9]))\\d{8}$";
 
+    private static ObjectMapper objectMapper;
+    static {
+        objectMapper = new ObjectMapper();
+    }
 
     /**
      * Json 2 map .
@@ -45,7 +50,6 @@ public class MessageWeChatHelpUtil {
         Map<String, String> map = null;
         try {
             map = new ConcurrentHashMap<>(16);
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(json);
             if (jsonNode.isNull()) {
                 return map;
@@ -74,19 +78,14 @@ public class MessageWeChatHelpUtil {
      */
     public static Map<String, String> xml2Map(InputStream inputStream) throws DocumentException, IOException {
         Map<String, String> map = new ConcurrentHashMap<>(16);
-
         SAXReader saxReader = new SAXReader();
         Document document = saxReader.read(inputStream);
-
         Element root = document.getRootElement();
-
         List<Element> list = root.elements();
         for (Element e : list) {
             map.put(e.getName(), e.getText());
         }
-
         inputStream.close();
-
         return map;
     }
 
@@ -133,7 +132,6 @@ public class MessageWeChatHelpUtil {
     public static String object2Json(Object valueType) throws MessageWeChatException {
         String json = null;
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             json = objectMapper.writeValueAsString(valueType);
         } catch (JsonProcessingException e) {
             throw new MessageWeChatException("Json Processing Exception: " + valueType.getClass().getName());
@@ -142,9 +140,23 @@ public class MessageWeChatHelpUtil {
     }
 
 
-    public static <T> T json2Object(String json, Class<T> valueType) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+    public static <T> T json2Object(byte[] json, Class<T> valueType) throws IOException {
         return (T) objectMapper.readValue(json, valueType);
+    }
+
+    /**
+     * 格式化json字符串
+     *
+     * @param json the json
+     * @return the string
+     * @throws IOException the io exception
+     * @author zili.wang
+     * @date 2019 /06/13 20:35:00
+     */
+    public static String formatJson(String json) throws IOException {
+        Object obj = objectMapper.readValue(json, Object.class);
+        String jsonFormat = objectMapper.writeValueAsString(obj);
+        return jsonFormat;
     }
 
 }

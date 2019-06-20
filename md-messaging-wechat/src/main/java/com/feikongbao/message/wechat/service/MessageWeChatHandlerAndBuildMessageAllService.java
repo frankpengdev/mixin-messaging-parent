@@ -92,11 +92,6 @@ public class MessageWeChatHandlerAndBuildMessageAllService {
             responseMessage.setContent("您好，欢迎关注费控宝SAAS！\n\n请输入您的手机号码:\n\n根据提示完成绑定");
         }
 
-        // 模板消息 微信返回处理事件消息
-        if (WeChatMessageTypeEnum.TEMPLATESENDJOBFINISH.name().equals(event.toUpperCase())) {
-            weChatDataService.updateWeChatMessageStatus(status, openId, msgId);
-        }
-
         //click事件
         String CLICK = "CLICK";
         if (CLICK.equals(event)) {

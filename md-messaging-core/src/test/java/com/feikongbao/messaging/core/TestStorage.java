@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { MessagingCoreConfig.class })
-public class SenderTest {
+public class TestStorage {
 
 	@Autowired
 	private MessagingCoreService messagingCoreService;
@@ -22,7 +22,7 @@ public class SenderTest {
 	/** 测试保存数据库 **/
 	@Test
 	public void testStorage(){
-		Long userId = 56789L;
+		String userId = "test_messaging_core";
 		String uuid = "test";
 		String exchange = "test";
 		String routingKey = "test";

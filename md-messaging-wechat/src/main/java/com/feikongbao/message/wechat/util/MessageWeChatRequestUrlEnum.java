@@ -15,8 +15,8 @@ public enum MessageWeChatRequestUrlEnum {
 
     WECHAT_APP_SECRET("3b95de6cd130b69800ab41807b53a18d"),
 
-    WECHAT_MENU_CREATE_URL("https://api.weixin.qq.com/cgi-bin/menu/create?access_token={}"),
-    WECHAT_MENU_DELETE_URL("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={}"),
+    WECHAT_MENU_CREATE_URL("https://api.weixin.qq.com/cgi-bin/menu/create?access_token={0}"),
+    WECHAT_MENU_DELETE_URL("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={0}"),
 
     /**
      * 模板消息的url.

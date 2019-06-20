@@ -2,6 +2,7 @@ package com.feikongbao.message.wechat.client.service;
 
 import com.feikongbao.message.wechat.client.model.entiy.MessageWeChatClientTemplateData;
 import com.feikongbao.message.wechat.client.model.entiy.ResponseData;
+import com.feikongbao.message.wechat.client.util.MessageWeChatResponseStatusEnum;
 import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.feikongbao.messaging.core.exception.MessagingCoreException;
 import com.feikongbao.messaging.core.sender.SenderMessage;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.SmartValidator;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,7 +42,7 @@ public class MessageWeChatClientSendMessageService {
      * @date 2019/05/30 15:00:42
      */
     public ResponseData sendMessageToMq( MessageWeChatClientTemplateData templateData,
-                                        Long userId) throws MessagingCoreException {
+                                        String userId) throws MessagingCoreException, UnsupportedEncodingException {
         ResponseData responseData = new ResponseData();
         //验证数据
         BindingResult bindingResult = new BeanPropertyBindingResult(templateData,templateData.getClass().getSimpleName());
@@ -64,12 +66,12 @@ public class MessageWeChatClientSendMessageService {
 
         if (null == object) {
             responseData.setErrCode("0");
-            responseData.setErrMsg("SUCCESS");
+            responseData.setErrMsg(MessageWeChatResponseStatusEnum.SUCCESS_NULL.name());
             return responseData;
         }
 
-        String responseMessage = new String((byte[]) object);
-        String SUCCESS = "SUCCESS";
+        String responseMessage = new String( ((byte[]) object),"UTF-8");
+        String SUCCESS = MessageWeChatResponseStatusEnum.SUCCESS.name();
         if (responseMessage.startsWith(SUCCESS)) {
             responseData.setErrCode("0");
             responseData.setErrMsg(SUCCESS);
