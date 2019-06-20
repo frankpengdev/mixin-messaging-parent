@@ -1,6 +1,5 @@
 package com.feikongbao.messaging;
 
-import com.feikongbao.messaging.core.constants.AbstractMessagingConstants;
 import com.feikongbao.messaging.core.sender.SenderMessage;
 import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
 import com.feikongbao.messaging.email.api.entity.MailEntity;
@@ -50,7 +49,7 @@ public class SendMailTest {
          mailEntity.setEmailServiceEntity(buildMailServiceEntity());
 
         // 部分邮箱不支持发送.exe文件
-        senderMessage.sendMessage(AbstractMessagingConstants.DIRECT_MQ_EXCHANGE_EMAIL,AbstractMessagingConstants.DIRECT_MQ_ROUTINGKEY_EMAIL,mailEntity,"test_send_email");
+        // senderMessage.sendMessage(AbstractMessagingConstants.DIRECT_MQ_EXCHANGE_EMAIL,AbstractMessagingConstants.DIRECT_MQ_ROUTINGKEY_EMAIL,mailEntity,"test_send_email");
     }
 
     /** bytes[] */
