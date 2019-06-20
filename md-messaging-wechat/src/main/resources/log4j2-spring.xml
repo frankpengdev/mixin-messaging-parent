@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" name="md-messaging-wechat">
     <Properties>
-       <Property name="LOG_ROOT_DIR">/fkb-logs</Property>
+       <Property name="LOG_ROOT_DIR">fkb-logs</Property>
     </Properties>
 
     <Appenders>
