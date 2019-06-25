@@ -103,7 +103,10 @@ public enum MiMeTypeEnum {
     JAD(".jad", "text/vnd.sun.j2me.app-descriptor"),
 
     //SISX文件(symbian平台)
-    SISX(".sisx", "application/vnd.symbian.epoc/x-sisx-app ");
+    SISX(".sisx", "application/vnd.symbian.epoc/x-sisx-app"),
+
+    // 二进制流，不知道下载文件类型
+    OTHER(".*", "application/octet-stream");
 
     public String key;
 
@@ -128,7 +131,7 @@ public enum MiMeTypeEnum {
 
         MiMeTypeEnum r = KEY_FIND_HELPER.find(key, null);
         if (Objects.isNull(r)) {
-            throw new IllegalArgumentException(MiMeTypeEnum.class.getCanonicalName() + "中未找到key为" + key + "的枚举. ");
+            r = KEY_FIND_HELPER.find(".*", null);
         }
         return r;
     }
