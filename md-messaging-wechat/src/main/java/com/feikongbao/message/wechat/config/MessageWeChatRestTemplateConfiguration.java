@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/4/17 17:57
  */
 @Configuration
-@EnableApolloConfig("megalodon.wechat")
+@EnableApolloConfig("wechat")
 public class MessageWeChatRestTemplateConfiguration {
 
     @Value("${messaging_wechat_rest_read_timeout}")
