@@ -8,6 +8,7 @@ import com.feikongbao.messaging.email.api.entity.EmailServiceEntity;
 import com.feikongbao.messaging.email.api.entity.MailEntity;
 import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
 import com.feikongbao.messaging.email.api.exception.EmailException;
+import com.feikongbao.messaging.email.api.utils.JsonUtils;
 import com.feikongbao.messaging.email.api.utils.MailUtils;
 import com.feikongbao.messaging.email.utils.BuildUserDefinedMailboxService;
 import com.rabbitmq.client.Channel;
@@ -97,8 +98,7 @@ public class SenderMailService implements ReceiverMessage {
             }
             // 消费成功手动确认ACK 为false时表示此条消息消费成功，为true时表示所有消息消费成功,已使用AOP处理
         }catch (Exception e){
-            logger.error("sending mail error == ");
-            e.printStackTrace();
+            logger.error("sending mail error == ", JsonUtils.obj2json(e));
             throw new EmailException("messaging-email.system.excption.when.sending.mail");
         }
     }
