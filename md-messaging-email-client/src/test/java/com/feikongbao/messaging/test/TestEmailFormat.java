@@ -38,7 +38,7 @@ public class TestEmailFormat {
         mailEntity.setUserId("user310");
         mailEntity.setFrom("abcdefghijklmn.com");
         List<String> to = new ArrayList();
-        to.add("geniusjj@qq.com");
+        to.add("jinjing@yodoo.net.cn");
         mailEntity.setTo(to);
         mailEntity.setCc(to);
         mailEntity.setBcc(to);
