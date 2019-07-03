@@ -5,6 +5,7 @@ import com.feikongbao.messaging.email.api.entity.MailEntity;
 import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
 import com.feikongbao.messaging.email.api.exception.EmailException;
 import com.yodoo.megalodon.datasource.config.EmailConfig;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -129,7 +130,8 @@ public class MailUtils {
             return "";
         } else {
             // 不带最后的点
-            return fileName.substring(fileName.lastIndexOf(fileExt));
+            return FilenameUtils.getExtension(fileName);
+            //return fileName.substring(fileName.lastIndexOf(fileExt));
         }
     }
 }

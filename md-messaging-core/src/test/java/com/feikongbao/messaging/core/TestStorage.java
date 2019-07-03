@@ -29,7 +29,7 @@ public class TestStorage {
 		int replyCode = 999;
 		String replyText = "test";
 		String messageJson = "test";
-		messagingCoreService.saveReturnedMessageStorage(userId,uuid,exchange,routingKey,replyCode,replyText,messageJson);
+		// messagingCoreService.saveReturnedMessageStorage(userId,uuid,exchange,routingKey,replyCode,replyText,messageJson);
 	}
 }
 
