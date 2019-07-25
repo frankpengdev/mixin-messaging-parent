@@ -1022,8 +1022,14 @@ public enum MiMeTypeEnum {
     // 二进制流，不知道下载文件类型
     OTHER("*", "application/octet-stream");
 
+    /**
+     * key
+     */
     public String key;
 
+    /**
+     * value
+     */
     public String value;
 
     MiMeTypeEnum(String key, String value) {
