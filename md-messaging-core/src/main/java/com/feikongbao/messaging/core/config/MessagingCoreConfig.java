@@ -97,7 +97,7 @@ public class MessagingCoreConfig {
      */
     @Bean
     public ObjectMapper objectMapper(){
-        ObjectMapper mapper = new ObjectMapper();
+        // ObjectMapper mapper = new ObjectMapper();
         // mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         // mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -25,7 +25,7 @@ public class MailUtils {
     @Autowired
     private EmailConfig emailConfig;
 
-    public final static String fileExt = ".";
+    public final static String FILE_EXT = ".";
 
     /**
      * 非空参数校验 ： 发送和接收的邮箱
@@ -126,12 +126,12 @@ public class MailUtils {
      * @return 如："jpg" or "".
      */
     public String getFileExt(String fileName) {
-        if (StringUtils.isBlank(fileName) || !fileName.contains(fileExt)) {
+        if (StringUtils.isBlank(fileName) || !fileName.contains(FILE_EXT)) {
             return "";
         } else {
             // 不带最后的点
             return FilenameUtils.getExtension(fileName);
-            //return fileName.substring(fileName.lastIndexOf(fileExt));
+            //return fileName.substring(fileName.lastIndexOf(FILE_EXT));
         }
     }
 }
