@@ -11,9 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Java6Assertions.fail;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -129,29 +127,5 @@ public class TestSendMail {
 
     }
 
-    /**  测试发送附件ABC (附件类型不在MiMeTypeEnum中)*/
-    @Test
-    public void testSendAttachment() throws Exception{
 
-        MailEntity mailEntity = new MailEntity();
-        mailEntity.setUserId("user310");
-        mailEntity.setFrom("test_feikongbao@163.com");
-        List<String> to = new ArrayList();
-        to.add("jinjing@yodoo.net.cn");
-        mailEntity.setTo(to);
-        mailEntity.setSubject("邮件主题：发送附件ABC测试");
-        mailEntity.setContent("邮件内容：发送附件rabbitmq_test.ABC");
-        mailEntity.setAddAttachments(getAttachmentBytes());
-
-        senderMailService.sendMail(mailEntity);
-
-    }
-
-    public Map<String, byte[]> getAttachmentBytes(){
-        Map<String, byte[]> attachmentMap = new HashMap<>();
-        StringBuilder strbur = new StringBuilder();
-        strbur.append("邮件测试：发送附件为ABC的邮件。");
-        attachmentMap.put("rabbitmq_test.ABC",strbur.toString().getBytes());
-        return attachmentMap;
-    }
 }
