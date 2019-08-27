@@ -64,7 +64,7 @@ public class MessagingCoreConfig {
         // 密码
         connectionFactory.setPassword(rabbitMqConfig.rabbitmqGeneralPassword);
         // 访问路径
-        connectionFactory.setVirtualHost(rabbitMqConfig.rabbitmqFeikongbaoVHost);
+        connectionFactory.setVirtualHost(rabbitMqConfig.rabbitmqVHost);
         // 消息发送到交换机确认机制，是否确认回调
         connectionFactory.setPublisherConfirms(rabbitMqConfig.rabbitmqPublisherConfirms);
         // 消息从交换器发送到队列确认机制，是否确认回调
