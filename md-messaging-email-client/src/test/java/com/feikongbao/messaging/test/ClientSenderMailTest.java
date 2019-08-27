@@ -34,12 +34,11 @@ public class ClientSenderMailTest {
         // 接收人的邮箱
         List<String> to = new ArrayList();
         to.add("877745616@qq.com");
-        to.add("jinjing@yodoo.net.cn");
         mailEntity.setTo(to);
         // 抄送
-        mailEntity.setCc(Arrays.asList("geniusjj_joe@hotmail.com"));
+        mailEntity.setCc(Arrays.asList("jinjing@yodoo.net.cn"));
         // 密送
-        mailEntity.setBcc(Arrays.asList("geniusjj@qq.com"));
+        mailEntity.setBcc(Arrays.asList("877745616@qq.com"));
         mailEntity.setSubject("RabbitMQ测试发送邮件客户端");
         // 正文
         mailEntity.setContent("为什么要学习Java? 因为学习Java他能发邮件。。。。，别的语言也可以，但我更喜欢Java");

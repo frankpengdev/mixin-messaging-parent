@@ -5,6 +5,7 @@ import com.feikongbao.messaging.email.api.entity.MailEntity;
 import com.feikongbao.messaging.email.api.enums.MiMeTypeEnum;
 import com.feikongbao.messaging.email.api.exception.EmailException;
 import com.yodoo.megalodon.datasource.config.EmailConfig;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class MailUtils {
     @Autowired
     private EmailConfig emailConfig;
 
-    public final static String fileExt = ".";
+    public final static String FILE_EXT = ".";
 
     /**
      * 非空参数校验 ： 发送和接收的邮箱
@@ -125,11 +126,12 @@ public class MailUtils {
      * @return 如："jpg" or "".
      */
     public String getFileExt(String fileName) {
-        if (StringUtils.isBlank(fileName) || !fileName.contains(fileExt)) {
+        if (StringUtils.isBlank(fileName) || !fileName.contains(FILE_EXT)) {
             return "";
         } else {
             // 不带最后的点
-            return fileName.substring(fileName.lastIndexOf(fileExt));
+            return FilenameUtils.getExtension(fileName);
+            //return fileName.substring(fileName.lastIndexOf(FILE_EXT));
         }
     }
 }

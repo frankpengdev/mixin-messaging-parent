@@ -1,5 +1,6 @@
 package com.feikongbao.messaging.email.config;
 
+import com.feikongbao.messaging.core.aopaspect.EnableMessagingCoreConfig;
 import com.feikongbao.messaging.core.config.MessagingCoreConfig;
 import com.yodoo.megalodon.datasource.annotation.EnableEmailConfig;
 import com.yodoo.megalodon.datasource.config.EmailConfig;
@@ -19,8 +20,8 @@ import java.util.Properties;
 // **/
 @Configuration
 @ComponentScan(basePackages= {"com.feikongbao.messaging.email"})
-@Import(MessagingCoreConfig.class)
 @EnableEmailConfig
+@EnableMessagingCoreConfig
 public class EmailServiceConfig {
 
     @Autowired

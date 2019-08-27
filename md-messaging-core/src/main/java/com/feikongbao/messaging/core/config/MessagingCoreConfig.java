@@ -64,7 +64,7 @@ public class MessagingCoreConfig {
         // 密码
         connectionFactory.setPassword(rabbitMqConfig.rabbitmqGeneralPassword);
         // 访问路径
-        connectionFactory.setVirtualHost(rabbitMqConfig.rabbitmqFeikongbaoVHost);
+        connectionFactory.setVirtualHost(rabbitMqConfig.rabbitmqVHost);
         // 消息发送到交换机确认机制，是否确认回调
         connectionFactory.setPublisherConfirms(rabbitMqConfig.rabbitmqPublisherConfirms);
         // 消息从交换器发送到队列确认机制，是否确认回调
@@ -97,7 +97,7 @@ public class MessagingCoreConfig {
      */
     @Bean
     public ObjectMapper objectMapper(){
-        ObjectMapper mapper = new ObjectMapper();
+        // ObjectMapper mapper = new ObjectMapper();
         // mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         // mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
