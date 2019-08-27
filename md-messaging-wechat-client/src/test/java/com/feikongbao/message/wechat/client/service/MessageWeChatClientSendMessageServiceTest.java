@@ -36,7 +36,7 @@ public class MessageWeChatClientSendMessageServiceTest {
      * @author zili.wang
      * @date 2019 /05/28 20:52:46
      */
-    @Test(expected = Exception.class)
+    @Test
     public void sendMessageToMq() throws MessagingCoreException, IOException {
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("template.json").getFile());
         String json = new String(Files.readAllBytes(file.toPath()));
@@ -53,7 +53,7 @@ public class MessageWeChatClientSendMessageServiceTest {
      * @throws MessagingCoreException
      * @throws IOException
      */
-    @Test(expected = Exception.class)
+    @Test
     public void testPhoneNotBind() throws MessagingCoreException, IOException {
             File file = new File(Thread.currentThread().getContextClassLoader().getResource("phoneNotBindTemplate.json").getFile());
             String json = new String(Files.readAllBytes(file.toPath()));
@@ -70,7 +70,7 @@ public class MessageWeChatClientSendMessageServiceTest {
      * @throws MessagingCoreException
      * @throws IOException
      */
-    @Test(expected = Exception.class)
+    @Test
     public void testTemplateIdNotExist() throws MessagingCoreException, IOException {
 
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("templateIdNotExistTemplate.json").getFile());
@@ -87,7 +87,7 @@ public class MessageWeChatClientSendMessageServiceTest {
      * @throws MessagingCoreException
      * @throws IOException
      */
-    @Test(expected = Exception.class)
+    @Test
     public void testUserIdIsNull() throws MessagingCoreException, IOException {
 
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("userIdIsNullTemplate.json").getFile());
@@ -104,9 +104,8 @@ public class MessageWeChatClientSendMessageServiceTest {
      * @throws MessagingCoreException
      * @throws IOException
      */
-    @Test(expected = Exception.class)
+    @Test
     public void testPhoneNumberFormatError() throws MessagingCoreException, IOException {
-
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("phoneNumberFormatErrorTemplate.json").getFile());
         String json = new String(Files.readAllBytes(file.toPath()));
         ObjectMapper objectMapper = new ObjectMapper();
