@@ -106,7 +106,6 @@ public class MessageWeChatClientSendMessageServiceTest {
      */
     @Test
     public void testPhoneNumberFormatError() throws MessagingCoreException, IOException {
-
         File file = new File(Thread.currentThread().getContextClassLoader().getResource("phoneNumberFormatErrorTemplate.json").getFile());
         String json = new String(Files.readAllBytes(file.toPath()));
         ObjectMapper objectMapper = new ObjectMapper();
