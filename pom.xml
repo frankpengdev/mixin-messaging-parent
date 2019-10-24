@@ -3,22 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- springboot 父工程 -->
     <parent>
-        <groupId>com.yodoo</groupId>
-        <artifactId>yodoo-megalodon-parent</artifactId>
+        <groupId>com.mixin</groupId>
+        <artifactId>mixin-parent-pom</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <!-- 包名 -->
-    <groupId>com.yodoo.megalodon</groupId>
-    <artifactId>md-messaging</artifactId>
+    <groupId>com.mixin</groupId>
+    <artifactId>idl-messaging-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>md-messaging</name>
-    <description>messaging project manage</description>
+    <name>idl-messaging-parent</name>
+    <description>messaging parent project</description>
 
-    <!-- 编码 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,23 +25,24 @@
     <!-- 消息各子模块 -->
     <modules>
         <!-- 消息 rabbitmq 核发包 -->
-        <module>md-messaging-core</module>
+        <module>idl-messaging-core</module>
         <!-- 发送邮件服务包 -->
-        <module>md-messaging-email</module>
+        <module>idl-messaging-email</module>
         <!-- 发送邮件客户包 -->
-        <module>md-messaging-email-client</module>
+        <module>idl-messaging-email-client</module>
         <!-- 邮件服务包和客户包实体 -->
-        <module>md-messaging-email-api</module>
+        <module>idl-messaging-email-api</module>
         <!-- 发送微信服务包 -->
-        <module>md-messaging-wechat</module>
+        <module>idl-messaging-wechat</module>
         <!-- 发送微信服务客户端包 -->
-        <module>md-messaging-wechat-client</module>
+        <module>idl-messaging-wechat-client</module>
     </modules>
     <dependencies>
         <dependency>
-            <groupId>com.yodoo.megalodon</groupId>
-            <artifactId>md-company-datasource</artifactId>
+            <groupId>com.mixin</groupId>
+            <artifactId>idl-plt-cfg</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.data</groupId>
