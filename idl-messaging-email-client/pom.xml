@@ -5,36 +5,32 @@
 
 	<parent>
 		<groupId>com.mixin</groupId>
-		<artifactId>idl-messaging-parent</artifactId>
+		<artifactId>mixin-messaging-parent-pom</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
-	<groupId>com.mixin</groupId>
+
 	<artifactId>idl-messaging-email-client</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>idl-messaging-email-client</name>
-	<description>idl-messaging-email-client</description>
+	<description>The client library that should be used by any program needing to send email messages,
+	internally this client library just send the email messages to the RabbitMQ message broker and then returns,
+	the actual email dispatching action is performed asynchronously by the au-messaging-email-executor.</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.mixin</groupId>
-			<artifactId>idl-messaging-core</artifactId>
+			<artifactId>idl-messaging-entity</artifactId>
+			<scope>compile</scope>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
-        <dependency>
-            <groupId>com.mixin</groupId>
-            <artifactId>idl-messaging-email-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-		<!-- aop -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-amqp</artifactId>
 		</dependency>
-	</dependencies>
+    </dependencies>
 </project>
