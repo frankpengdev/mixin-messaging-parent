@@ -23,4 +23,4 @@ listening to the various queues to react upon the message arrival.
     
 #### Application (as the message receiver):
     * au-messaging-executor(should be deployed as a standalone JVM).
-      The RabbitMQ's messaging receiving side do the actural work of sending email/wechat messages.
+      The RabbitMQ's message receiving side do the actural work of sending email/wechat messages.
