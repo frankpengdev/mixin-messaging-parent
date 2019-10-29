@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -61,7 +62,11 @@ public class EmailMessageListener {
         if (!StringUtils.isEmpty(mailMessage.getSender())) {
             helper.setFrom(mailMessage.getSender());
         }
-        mailSender.send(mimeMessage);
+        try {
+            mailSender.send(mimeMessage);
+        } catch (MailException ex) {
+            throw new MessagingException(ex.getMessage());
+        }
     }
 
 
