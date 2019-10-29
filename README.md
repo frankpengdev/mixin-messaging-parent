@@ -2,7 +2,7 @@
 The submodules included in this module works around the RabbitMQ message broker,
 we have client libraries(as the message publisher) to send message to RabbitMQ, 
 and we have an application(a standalone JVM as the message receiver) 
-listening the various queues to react upone the message arrival.
+listening to the various queues to react upon the message arrival.
 
 ## What we set on the Queues and Messages?
     * All the queue are set to be durable, see EmailMessagingClientConfig.
